@@ -65,10 +65,26 @@ export const updateSession = async (request: NextRequest) => {
 
     const { data: { user } } = await supabase.auth.getUser()
 
+    //Check if user is registered or not
     if (!user && request.nextUrl.pathname !== '/login') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
+    //Check if user has profile or not
+    if (user) {
+      // Query your 'profiles' table or equivalent to check if the user has a profile
+      const { data: profile, error } = await supabase
+          .from('profiles') // Assuming 'profiles' is your table name
+          .select('*')
+          .eq('user_id', user.id) // Assuming 'user_id' is the foreign key in 'profiles' table
+          .single();
 
+      // If there's no profile or an error querying the profile, redirect to '/createProfile'
+      if (!profile || error) {
+        if (request.nextUrl.pathname !== '/createProfile') {
+          return NextResponse.redirect(new URL('/createProfile', request.url));
+        }
+      }
+    }
     return response;
   } catch (e) {
     // If you are here, a Supabase client could not be created!
