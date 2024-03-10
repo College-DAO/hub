@@ -75,13 +75,13 @@ export const updateSession = async (request: NextRequest) => {
       const { data: profile, error } = await supabase
           .from('profiles') // Assuming 'profiles' is your table name
           .select('*')
-          .eq('user_id', user.id) // Assuming 'user_id' is the foreign key in 'profiles' table
+          .eq('id', user.id) // Assuming 'user_id' is the foreign key in 'profiles' table
           .single();
 
       // If there's no profile or an error querying the profile, redirect to '/createProfile'
       if (!profile || error) {
-        if (request.nextUrl.pathname !== '/createProfile') {
-          return NextResponse.redirect(new URL('/createProfile', request.url));
+        if (request.nextUrl.pathname !== '/signup') {
+          return NextResponse.redirect(new URL('/signup', request.url));
         }
       }
     }
