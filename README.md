@@ -1,93 +1,243 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# MakerKit - SaaS Starter for Next.js and Supabase
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+MakerKit is a SaaS starter project built with Next.js, Supabase and Tailwind CSS.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Features
+## Getting Started
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+This is a quick guide to get you started with the project. For more details, 
+please refer to the [documentation](https://makerkit.dev/docs/next-supabase/introduction).
 
-## Demo
+### Before you deploy to production
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+Many users try to deploy to production without going through the steps below.
+The result is the application won't be working as expected.
 
-## Deploy to Vercel
+**Important**: deploying to production (Vercel or other) will require you to 
+fill the required environment variables. 
 
-Vercel deployment will guide you through creating a Supabase account and project.
+[Please refer to the documentation](https://makerkit.dev/docs/next-supabase/going-to-production-overview) to 
+learn more.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+**Failure to do so will result in your application not working as expected 
+or not deploying at all**. Please ensure you have the required environment 
+variables and keys before deploying to production.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This%20starter%20configures%20Supabase%20Auth%20to%20use%20cookies%2C%20making%20the%20user's%20session%20available%20throughout%20the%20entire%20Next.js%20app%20-%20Client%20Components%2C%20Server%20Components%2C%20Route%20Handlers%2C%20Server%20Actions%20and%20Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6)
+### Requirements
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+Ensure you have the following installed:
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+- Node.js (LTS recommended)
+- Git
+- Docker
 
-## Clone and run locally
+### Cloning the Repository
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+Clone this repository and name it according to your preferences (in the example below, we use `your-saas`):
 
-2. Create a Next.js app using the Supabase Starter template npx command
+```
+git clone https://github.com/makerkit/next-supabase-saas-kit.git your-saas
+```
 
-   ```bash
-   npx create-next-app -e with-supabase
-   ```
+Move to the folder just cloned:
 
-3. Use `cd` to change into the app's directory
+```
+cd your-saas
+```
 
-   ```bash
-   cd name-of-new-app
-   ```
+Set this repository as your upstream fork, so you can
+pull updates when needed:
 
-4. Rename `.env.local.example` to `.env.local` and update the following:
+```
+git remote add upstream https://github.com/makerkit/next-supabase-saas-kit
+```
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+We recommend to watch to the repository, so you know when there's an update.
+To pull the latest updates, use:
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+```
+git pull upstream main
+```
 
-5. You can now run the Next.js local development server:
+In case we change the same files, you will need to resolve the conflicts.
 
-   ```bash
-   npm run dev
-   ```
+Alternatively, you can cherry-pick changes so to reduce the amount of
+conflicts across the files.
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+### Installing the Node Modules
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+Install the Node modules with the following command:
 
-## Feedback and issues
+```
+npm i
+```
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+### Supabase
 
-## More Supabase examples
+First, run the Supabase stack:
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+```bash
+npm run supabase:start
+```
+
+**NB**: this does not run your remote Supabase project, but a local instance
+using Docker. This is useful for development and testing.
+
+For production, you will need to copy your remote instance keys, and push 
+the database migrations to your remote instance.
+
+**Recommendation**: use the local instance for development, and the
+production instance **when you're ready to deploy**. Please set up the local
+instance first before attempting to use the production instance, so that you 
+can test your application locally and familiarise with the product.
+
+If you are planning to deploy Supabase to production right away, [please ensure you read this guide by Supabase first](https://supabase.com/docs/guides/cli/local-development#link-your-project).
+
+#### Adding the Supabase Keys to the Environment Variables
+
+We add the default Supabase keys to the environment variables, so we can run 
+Supabase locally right away.
+
+When running the command, we will see a message like this:
+
+```bash
+> supabase start
+
+Applying migration 20221215192558_schema.sql...
+Seeding data supabase/seed.sql...
+Started supabase local development setup.
+
+         API URL: http://localhost:54321
+          DB URL: postgresql://postgres:postgres@localhost:54322/postgres
+      Studio URL: http://localhost:54323
+    Inbucket URL: http://localhost:54324
+      JWT secret: super-secret-jwt-token-with-at-least-32-characters-long
+        anon key: ****************************************************
+service_role key: ****************************************************
+```
+
+Only if the values above are different than the ones already setup in `.env.
+development` and `.env.test`, we need to copy the `anon key` and 
+`service_role key` values and add them to the `.env.local` file:
+
+```
+NEXT_PUBLIC_SUPABASE_ANON_KEY=****************************************************
+SUPABASE_SERVICE_ROLE_KEY=****************************************************
+```
+
+#### Database types (optional)
+
+We provide the default database types for TypeScript. If you want to 
+generate new types, you can do so with the following command:
+
+```
+npm run typegen
+```
+
+This is useful when you add/update new tables or columns to your database, 
+so that the Supabase client can provide you with the correct types.
+
+### Next.js Server
+
+Then, run the Next.js development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Use any of the above commands to start the Next.js server.
+
+### Running the Stripe CLI
+
+If you're testing Stripe, also run the Stripe server (requires Docker running):
+
+```
+npm run stripe:listen
+```
+
+Then, copy the printed webhook key and add it to your environment files.
+This can also be used for running the E2E tests.
+
+The environment variable name is `STRIPE_WEBHOOK_SECRET`.
+
+```
+STRIPE_WEBHOOK_SECRET=whsec_***********************
+```
+
+#### Signing In for the first time
+
+You should now be able to sign in. To quickly get started, use the following credentials:
+
+```
+email = test@makerkit.dev
+password = testingpassword
+```
+
+#### Email Confirmations
+
+When signing up, Supabase sends an email confirmation to a testing account. You can access the InBucket testing emails [using the following link](http://localhost:54324/monitor), and can follow the links to complete the sign up process.
+
+InBucket is an SMTP testing service that Supabase uses to send emails.
+
+### After Creating your Supabase Project
+
+Make sure to add the environment variables to the provider you're deploying.
+
+### Running Tests
+
+To customize the testing environment, add the required environment variables to 
+your `.env.test` file.
+
+#### Running E2E Stripe Tests
+
+To run the Stripe tests and enable Stripe in development mode, you need to:
+
+1. Enable the tests using the environment variable `ENABLE_STRIPE_TESTING` in
+   `.env.test`
+2. Have Docker installed and running in your local machine to run the Stripe
+   CLI
+3. Generate a webhook key and set the environment variable
+   `STRIPE_WEBHOOK_SECRET` and the other required Stripe environment variables
+
+The first two steps are only required to run the Cypress E2E tests for
+Stripe. Generating a webhook key and running the Stripe CLI server is
+always required for developing your Stripe functionality locally.
+
+The variables should be added either in `.env.test` or as part of your CI 
+environment. 
+
+NB: The secret keys should not be added to the repository - even 
+though these are test keys. Instead - please add them to your CI 
+environment - such as Github Actions.
+
+The test API keys should be added as secrets - while the variable 
+ENABLE_STRIPE_TESTING should be added as a simple variable.
+
+To generate a webhook key, run the following command:
+
+```
+npm run stripe:listen
+```
+
+If it worked, it will print the webhook key. Then, paste it into
+your environment files as `STRIPE_WEBHOOK_SECRET`.
+
+This key is also needed to run Stripe during development to receive the
+Stripe webhooks to your local server.
+
+```
+ENABLE_STRIPE_TESTING=true
+```
+
+The Stripe tests work only using the Embedded Stripe Checkout.
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
