@@ -2,6 +2,7 @@
   "name": "next-supabase-saas-kit",
   "version": "0.11.10",
   "private": true,
+  "proxy": "http://localhost:3000",
   "sideEffects": false,
   "scripts": {
     "analyze": "ANALYZE=true next build",

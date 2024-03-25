@@ -1,16 +1,51 @@
-import SentPartnershipsListContainer from '~/components/partnerships/SentPartnershipsListContainer';
-import ReceivedPartnershipsListContainer from '~/components/partnerships/ReceivedPartnershipsListContainer';
-import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
+import loadDynamic from 'next/dynamic';
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
-const PartnershipsPage: React.FC = () => {
-    const organization = useCurrentOrganization();
-    if (!organization || organization.id === undefined) {
-        return <div>Loading or organization not found...</div>;
-    }
+import AppHeader from '../components/AppHeader';
+import { withI18n } from '~/i18n/with-i18n';
+import Spinner from '~/core/ui/Spinner';
+import Trans from '~/core/ui/Trans';
+import Button from '~/core/ui/Button';
+import { PageBody } from '~/core/ui/Page';
+import CreatePartnershipModalToggle from '../components/CreatePartnershipModal';
 
-    return (
-        <SentPartnershipsListContainer senderId={organization.id} />
-    );
+const PartnershipsDemo = loadDynamic(() => import('../components/PartnershipsDemo'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className={
+        'flex flex-1 items-center h-full justify-center flex-col space-y-4' +
+        ' py-24'
+      }
+    >
+      <Spinner className={'text-primary'} />
+
+      <div>
+        <Trans i18nKey={'common:loading'} />
+      </div>
+    </div>
+  ),
+});
+
+export const metadata = {
+  title: 'Partnerships',
 };
 
-export default PartnershipsPage;
+function PartnershipsPage() {
+  
+  return (
+    <>
+      <AppHeader
+        title={<Trans i18nKey={'Partnership'} />}
+        description={<Trans i18nKey={'Connect with the CollegeDAO ecosystem'} />}
+      >
+        <CreatePartnershipModalToggle />
+      </AppHeader>
+      <PageBody>
+        <PartnershipsDemo />
+      </PageBody>
+    </>
+  );
+}
+
+export default withI18n(PartnershipsPage);
