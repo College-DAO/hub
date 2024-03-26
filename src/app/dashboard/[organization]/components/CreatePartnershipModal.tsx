@@ -1,21 +1,13 @@
 'use client';
 
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Dialog, DialogContent, DialogTitle } from '~/core/ui/Dialog';
 import Button from '~/core/ui/Button';
 import TextField from '~/core/ui/TextField';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '~/core/ui/Dropdown';
 import { createClient } from '@supabase/supabase-js';
 import Trans from '~/core/ui/Trans';
 import Alert from '~/core/ui/Alert';
-import useCurrentOrganization from "~/lib/organizations/hooks/use-current-organization";
-import Modal from '~/core/ui/Modal';
 
 // Initialize Supabase client
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
@@ -28,38 +20,16 @@ const CreatePartnershipModalToggle: React.FC = () => {
         duration: string;
         fundingAmount: string;
         details: string;
-        sender_id: number | undefined;
-        sender_name: string | undefined;
-        recepient_id: number | undefined;
-        recepient_name: string | undefined;
+        sender_id: string;
     }>({
         partnerName: '',
         partnershipType: 'sent',
         duration: '',
         fundingAmount: '',
         details: '',
-        sender_id: 1,
-        sender_name:'',
-        recepient_id: 1,
-        recepient_name: '',
-
+        sender_id: '1',
     });
     const [error, setError] = useState<string | null>(null);
-    const organzation = useCurrentOrganization();
-    const org_id = organzation?.id;
-    const org_name = organzation?.name
-
-    useEffect(() => {
-      // Update formData whenever org_id changes and is not undefined
-      if (org_id) {
-          setFormData(prevFormData => ({
-              ...prevFormData,
-              sender_id: org_id,
-              sender_name: org_name
-          }));
-      }
-  }, [org_id]);
-      
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -70,8 +40,23 @@ const CreatePartnershipModalToggle: React.FC = () => {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        
         e.preventDefault();
+        console.log("nice try~")
+        try{
+          console.log("hello")
+          const {
+            data: { user },
+          } = await supabase.auth.getUser()
+          if (user){
+            let metadata = user.user_metadata
+            console.log(metadata)
+          }
+          else
+          console.log("no user!")
+        }
+        catch{
+          console.log("no user!")
+        }
         try {
             const response = await fetch('/api/partnerships/create', {
                 method: 'POST',
@@ -91,87 +76,95 @@ const CreatePartnershipModalToggle: React.FC = () => {
     };
 
     return (
-      <>
-        <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
-            <PlusCircleIcon className={'w-4 mr-2'} />
-            <span>Add Partnership</span>
-        </Button>
-    
-        <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="Create New Partnership" closeButton>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <TextField>
-                    <TextField.Label>
-                        <Trans i18nKey={'Desired Recipient'} />
-                    </TextField.Label>
-                    <TextField.Input 
-                      name="partnerName" 
-                      required 
-                      minLength={2} 
-                      maxLength={50} 
-                      placeholder="Coinbase" 
-                      value={formData.partnerName} 
-                      onChange={handleChange}
-                    />
-                </TextField>
-    
-                {/* Partnership Details */}
-                <TextField>
-                    <TextField.Label>
-                        <Trans i18nKey={'Partnership Details'} />
-                    </TextField.Label>
-                    <TextField.Input 
-                      name="details" 
-                      required 
-                      minLength={2} 
-                      maxLength={50} 
-                      placeholder="Workshop" 
-                      value={formData.details} 
-                      onChange={handleChange}
-                    />
-                </TextField>
-    
-                {/* Funding Amount */}
-                <TextField>
-                    <TextField.Label>
-                        <Trans i18nKey={'Funding'} />
-                    </TextField.Label>
-                    <TextField.Input 
-                      name="fundingAmount" 
-                      required 
-                      type="number" 
-                      placeholder="99" 
-                      value={formData.fundingAmount} 
-                      onChange={handleChange}
-                    />
-                </TextField>
-    
-                {/* Duration */}
-                <TextField>
-                    <TextField.Label>
-                        <Trans i18nKey={'Duration'} />
-                    </TextField.Label>
-                    <TextField.Input 
-                      name="duration" 
-                      required 
-                      minLength={1} 
-                      maxLength={50} 
-                      placeholder="4" 
-                      value={formData.duration} 
-                      onChange={handleChange}
-                    />
-                </TextField>
-                {/* Error Display */}
-                {error && <p className="text-red-500">{error}</p>}
-    
-                {/* Submit and Cancel Buttons */}
-                <div className="flex justify-end space-x-2">
-                    <Modal.CancelButton onClick={() => setIsOpen(false)}><Trans i18nKey={'common:cancel'} /></Modal.CancelButton>
-                    <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
-                </div>
-            </form>
-        </Modal>
-      </>
+        <>
+            <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
+                <PlusCircleIcon className={'w-4 mr-2'} />
+                <span>Add Partnership</span>
+            </Button>
+            {isOpen && (
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                    <DialogContent>
+                        <DialogTitle>Create New Partnership</DialogTitle>
+                        <form onSubmit={handleSubmit}>
+                        <div>
+                          <TextField>
+                            <TextField.Label>
+                              <Trans i18nKey={'Desired Recepient'} />
+
+                              <TextField.Input
+                                data-cy={'create-partnership-name-input'}
+                                name={'partnerName'}
+                                required
+                                minLength={2}
+                                maxLength={50}
+                                placeholder={'Coinbase'}
+                                value={formData.partnerName}
+                                onChange={handleChange}
+                              />
+                            </TextField.Label>
+                          </TextField>
+                          <TextField>
+                            <TextField.Label>
+                              <Trans i18nKey={'Partnership Details'} />
+
+                              <TextField.Input
+                                data-cy={'create-partnership-name-input'}
+                                name={'details'}
+                                required
+                                minLength={2}
+                                maxLength={50}
+                                placeholder={'BASE Technical Workshops'}
+                                value={formData.details}
+                                onChange={handleChange}
+                              />
+                            </TextField.Label>
+                            <TextField>
+                            <TextField.Label>
+                              <Trans i18nKey={'Funding'} />
+
+                              <TextField.Input
+                                data-cy={'create-partnership-name-input'}
+                                name={'fundingAmount'}
+                                required
+                                minLength={2}
+                                maxLength={50}
+                                placeholder={'$550'}
+                                value={formData.fundingAmount}
+                                onChange={handleChange}
+                              />
+                            </TextField.Label>
+                          </TextField>
+                          <TextField>
+                            <TextField.Label>
+                              <Trans i18nKey={'Duration'} />
+                              <TextField.Input
+                                data-cy={'create-partnership-name-input'}
+                                name={'duration'}
+                                required
+                                minLength={2}
+                                maxLength={50}
+                                placeholder={'4 Weeks'}
+                                value={formData.duration}
+                                onChange={handleChange}
+                              />
+                            </TextField.Label>
+                          </TextField>
+                          </TextField>
+                        </div>
+                        
+                        <div>
+
+                        </div>
+                        <div>
+                          <Button type="submit">Create Partnership</Button>
+                          <Button type="button" onClick={() => setIsOpen(false)}>Cancel</Button>
+                        </div>
+                      </form>
+                    </DialogContent>
+                </Dialog>
+            )}
+        </>
     );
-    
-    }
+};
+
 export default CreatePartnershipModalToggle;
