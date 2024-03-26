@@ -11,9 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { partnerName, partnershipType, duration, fundingAmount, sender_id } = req.body;
-    console.log("Inside Handler");
-  console.log("Request Body:", req.body);
+    const { partnerName, partnershipType, duration, fundingAmount, sender_id , sender_name} = req.body;
     const { data, error } = await supabase
       .from('partnerships')
       .insert([
@@ -22,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           type: partnershipType,
           duration: duration,
           funding: fundingAmount,
-          sender_id: sender_id
+          sender_id: sender_id,
+          sender_name: sender_name,
         },
       ]);
 
