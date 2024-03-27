@@ -67,6 +67,51 @@ const CreatePartnershipModalToggle: React.FC = () => {
     const organzation = useCurrentOrganization();
     const org_id = organzation?.id;
     const org_name = organzation?.name
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+
+    const fetchSearchResults = async (query: string) => {
+      try {
+        const url = `/api/partnerships/search?query=${encodeURIComponent(query)}`;
+        const response = await fetch(url, {
+          method: 'GET', // Explicitly set the method for clarity
+        });
+        if (!response.ok) throw new Error('Network response was not ok.');
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Failed to fetch search results:', error);
+        setSearchResults([]);
+      }
+    };
+    
+
+    useEffect(() => {
+      const delayDebounceFn = setTimeout(() => {
+        if (searchQuery.length > 2) {
+          fetchSearchResults(searchQuery);
+        } else {
+          setSearchResults([]);
+        }
+      }, 1000); // Adding debounce
+    
+      return () => clearTimeout(delayDebounceFn);
+    }, [searchQuery]);
+
+    const handleSelectOrganization = (org: any, e: React.MouseEvent<HTMLLIElement>) => {
+      e.preventDefault(); // Prevent default behavior
+      e.stopPropagation(); // Stop the event from propagating further
+    
+      setFormData({
+        ...formData,
+        partnerName: org.name, // Update formData with the selected organization's name
+        receiver_id: org.id,
+      });
+    
+      setSearchQuery(org.name); // Optionally update the search query to reflect the selected organization's name
+      setSearchResults([]); // Clear search results
+    };
+    
     
 
     useEffect(() => {
@@ -87,11 +132,9 @@ const CreatePartnershipModalToggle: React.FC = () => {
         [name]: value,
       });
     };
-
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log("nice try~")
-        
+        e.preventDefault(); 
         try {
             const response = await fetch('/api/partnerships/create', {
                 method: 'POST',
@@ -128,23 +171,40 @@ const CreatePartnershipModalToggle: React.FC = () => {
                 </TabsList>
 
                 <TabsContent value="Recipient">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Partnership Recipient</CardTitle>
-                          <CardDescription>
-                            Create a name and select who you want to send your partnerships to
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="space-y-1">
-                            <Label htmlFor="partnerName">Organization Name</Label>
-                            {/* Ensure TextField.Input or equivalent component properly receives value and onChange */}
-                            <TextField.Input id="partnerName" name="partnerName" value={formData.partnerName} onChange={handleInputChange} />
+  <Card>
+    <CardHeader>
+      <CardTitle>Partnership Recipient</CardTitle>
+      <CardDescription>
+        Search and select the organization you want to send your partnership to.
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-2">
+      <div className="space-y-1">
+        <Label htmlFor="searchOrganization">Search Organization</Label>
+            <TextField.Input
+              id="searchOrganization"
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              placeholder="Search organizations..."
+                              className="input-class" 
+                            />
+                            <ul className="search-results-class"> 
+                              {searchResults.map((org) => (
+                                <li key={org.id} onClick={(e) => handleSelectOrganization(org, e)} className="cursor-pointer">
+                                {org.name}
+                              </li>
+                              ))}
+                            </ul>
                           </div>
+                          {/* Include the Partnership Name input here if needed */}
                           <div className="space-y-1">
                             <Label htmlFor="partnershipName">Partnership Name</Label>
-                            {/* Ensure TextField.Input or equivalent component properly receives value and onChange */}
-                            <TextField.Input id="partnershipName" name="partnershipName" value={formData.partnershipName} onChange={handleInputChange} />
+                            <TextField.Input
+                              id="partnershipName"
+                              name="partnershipName"
+                              value={formData.partnershipName}
+                              onChange={handleInputChange}
+                            />
                           </div>
                         </CardContent>
                       </Card>
@@ -193,11 +253,10 @@ const CreatePartnershipModalToggle: React.FC = () => {
                           {/* Additional fields as needed */}
                         </CardContent>
                         <CardFooter className="flex justify-center">
-                      <Modal.CancelButton onClick={() => setIsOpen(false)}><Trans i18nKey={'common:cancel'} /></Modal.CancelButton>
                       <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
                     </CardFooter>
                       </Card>
-                    </TabsContent>
+                </TabsContent>
               </Tabs>
 
               </form>

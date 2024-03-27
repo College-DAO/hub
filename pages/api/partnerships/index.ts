@@ -1,4 +1,4 @@
-// API Route: /pages/api/partnerships.js or .ts
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
@@ -8,7 +8,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { type, userId } = req.query; // Assuming `userId` represents the organization ID of the user
+  const { type, userId } = req.query; 
 
   try {
     let query = supabase
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .eq('sender_id', userId);
     } else if (type === 'received') {
       query = query
-        .eq('receiver_id', userId) // Ensure 'received' partnerships are associated with the user's organization
+        .eq('receiver_id', userId) 
     }
 
     let { data, error } = await query;

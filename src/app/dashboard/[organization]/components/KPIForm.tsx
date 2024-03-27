@@ -41,7 +41,7 @@ function KPIForm({ kpis, setKpis }: KPIFormProps) {
           <Button
             type="button"
             onClick={() => deleteKpi(index)}
-            className="absolute top- right-2 text-red-500 focus:outline-none focus:ring-0 bg-transparent" // Position the delete button
+            className="absolute top-1 right-2 text-red-500 focus:outline-none focus:ring-0 bg-transparent" // Position the delete button
           >
             <MinusCircleIcon className="h-5 w-5" />
           </Button>

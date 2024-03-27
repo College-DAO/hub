@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const partnerships = [
       {
         partner_name: partnerName,
-        type: 'sent', // The sender initiates this type
+        type: 'sent', 
         duration: duration,
         funding: fundingAmount,
         sender_id: sender_id,
