@@ -3,7 +3,8 @@ import {
   Squares2X2Icon,
   UserGroupIcon,
   UserIcon,
-  PaperAirplaneIcon
+  PaperAirplaneIcon,
+  BriefcaseIcon
 } from '@heroicons/react/24/outline';
 
 import configuration from '~/configuration';
@@ -48,7 +49,15 @@ const NAVIGATION_CONFIG = (organization: string): NavigationConfig => ({
       label: 'Partnerships',
       path: getPath(organization, '/partnerships'),
       Icon: ({ className }: { className: string }) => {
-        return <PaperAirplaneIcon className={className} />;
+        return <Squares2X2Icon className={className} />;
+      },
+      end: true,
+    },
+    {
+      label: 'Jobs',
+      path: getPath(organization, '/jobs'),
+      Icon: ({ className }: { className: string }) => {
+        return <BriefcaseIcon className={className} />;
       },
       end: true,
     },
