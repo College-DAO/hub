@@ -156,9 +156,10 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
         <TableRow>
           <TableHead>Sender</TableHead>
           <TableHead>Receiver</TableHead>
-          <TableHead>Type</TableHead>
+          <TableHead>Description</TableHead>
           <TableHead>Funding</TableHead>
           <TableHead>Duration</TableHead>
+          <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -166,7 +167,7 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
           <TableRow key={partnership.id}>
             <TableCell>{partnership.sender_name}</TableCell>
             <TableCell>{partnership.partner_name}</TableCell>
-            <TableCell>{partnership.type}</TableCell>
+            <TableCell>{partnership.details}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.duration}</TableCell>
             {/* Example for adding a status badge similar to the CustomersTable. Adjust as needed. */}

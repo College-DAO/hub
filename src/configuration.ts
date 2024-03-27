@@ -56,6 +56,7 @@ const configuration = {
     onboarding: `/onboarding`,
     appPrefix: '/dashboard',
     appHome: '/dashboard',
+    partnershups: '/partnerships',
     authCallback: '/auth/callback',
     settings: {
       profile: 'settings/profile',
