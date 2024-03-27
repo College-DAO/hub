@@ -8,6 +8,9 @@ import TextField from '~/core/ui/TextField';
 import { createClient } from '@supabase/supabase-js';
 import Trans from '~/core/ui/Trans';
 import Alert from '~/core/ui/Alert';
+import { Skeleton } from "~/core/ui/skeleton"
+import KPIForm from './KPIForm';
+import {Kpi} from './KPIForm';
 import {
   Card,
   CardContent,
@@ -32,47 +35,43 @@ const CreatePartnershipModalToggle: React.FC = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [formData, setFormData] = useState<{
         partnerName: string;
+        partnershipName: string;
         partnershipType: string;
-        duration: string;
+        partnershipFormat: string;
+        durationStart: string;
+        durationEnd: string;
         fundingAmount: string;
         details: string;
         sender_id: string;
+        kpis: Kpi[];
     }>({
         partnerName: '',
+        partnershipName: '',
         partnershipType: 'sent',
-        duration: '',
+        partnershipFormat: '',
+        durationStart: '',
+        durationEnd: '',
         fundingAmount: '0',
         details: '',
         sender_id: '1',
+        kpis: [],
     });
     const [error, setError] = useState<string | null>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+  
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("nice try~")
-        try{
-          console.log("hello")
-          const {
-            data: { user },
-          } = await supabase.auth.getUser()
-          if (user){
-            let metadata = user.user_metadata
-            console.log(metadata)
-          }
-          else
-          console.log("no user!")
-        }
-        catch{
-          console.log("no user!")
-        }
+        
         try {
             const response = await fetch('/api/partnerships/create', {
                 method: 'POST',
@@ -82,6 +81,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
                 
                 body: JSON.stringify(formData),
             });
+            console.log(formData)
             if (!response.ok) throw new Error('Failed to create partnership');
             setIsOpen(false); // Close modal on success
             console.log('Partnership created successfully');
@@ -108,83 +108,78 @@ const CreatePartnershipModalToggle: React.FC = () => {
                 </TabsList>
 
                 <TabsContent value="Recipient">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Partnership Recipient</CardTitle>
-                      <CardDescription>
-                        Give a breif description of your partnership and who you want to send it to
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="space-y-1">
-                        <Label htmlFor="name">Organization Name</Label>
-                        <TextField.Input id="name" defaultValue="" type="search" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="username">Short Description</Label>
-                        <TextField.Input id="details" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                <TabsContent value="Details">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Details</CardTitle>
-                      <CardDescription>
-                        Describe your partnership details
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="space-y-1">
-                        <Label htmlFor="current">Type of Partnership</Label>
-                        <TextField.Input id="current"  />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="new">Start Date</Label>
-                        <TextField.Input id="new" type="month" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="new">End Date</Label>
-                        <TextField.Input id="new" type="month" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="funding">Funding</Label>
-                        <TextField.Input id="funding" type="number" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="funding">Short Description</Label>
-                        <TextField.Input id="funding"  />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="KPI">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>KPI's for the partnership</CardTitle>
-                      <CardDescription>
-                        Create all the KPI's needed for the partnership.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="space-y-1">
-                        <Label htmlFor="name">Goal</Label>
-                        <TextField.Input id="name" />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="username">Short Description</Label>
-                        <TextField.Input id="details" />
-                      </div>
-                    </CardContent>
-                    <CardFooter>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Partnership Recipient</CardTitle>
+                          <CardDescription>
+                            Create a name and select who you want to send your partnerships to
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="space-y-1">
+                            <Label htmlFor="partnerName">Organization Name</Label>
+                            {/* Ensure TextField.Input or equivalent component properly receives value and onChange */}
+                            <TextField.Input id="partnerName" name="partnerName" value={formData.partnerName} onChange={handleInputChange} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="partnershipName">Partnership Name</Label>
+                            {/* Ensure TextField.Input or equivalent component properly receives value and onChange */}
+                            <TextField.Input id="partnershipName" name="partnershipName" value={formData.partnershipName} onChange={handleInputChange} />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                    <TabsContent value="Details">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>Partnership Detail</CardTitle>
+                          <CardDescription>
+                            Provide a brief description of your partnership
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="space-y-1">
+                            <Label htmlFor="partnershipFormat">Partnership Format</Label>
+                            <TextField.Input id="partnershipFormat" name="partnershipFormat" value={formData.partnershipFormat} onChange={handleInputChange} />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="durationStart">Start Date</Label>
+                            <TextField.Input id="durationStart" name="durationStart" value={formData.durationStart} onChange={handleInputChange}type="month" />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="durationEnd">End Date</Label>
+                            <TextField.Input id="durationEnd" name="durationEnd" value={formData.durationEnd} onChange={handleInputChange}type="month" />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="fundingAmount">Funding</Label>
+                            <TextField.Input id="fundingAmount" name="fundingAmount" value={formData.fundingAmount} onChange={handleInputChange}type="number" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                    <TabsContent value="KPI">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>KPI's</CardTitle>
+                          
+                          <CardDescription>
+                            Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="space-y-1">
+                          <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({...formData, kpis: newKpis})} />
+                          </div>
+                          {/* Additional fields as needed */}
+                        </CardContent>
+                        <CardFooter className="flex justify-center">
                       <Modal.CancelButton onClick={() => setIsOpen(false)}><Trans i18nKey={'common:cancel'} /></Modal.CancelButton>
                       <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
                     </CardFooter>
-                  </Card>
-                </TabsContent>
+                      </Card>
+                    </TabsContent>
               </Tabs>
+
               </form>
               
             </Modal>
