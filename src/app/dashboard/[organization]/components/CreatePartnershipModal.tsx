@@ -8,6 +8,22 @@ import TextField from '~/core/ui/TextField';
 import { createClient } from '@supabase/supabase-js';
 import Trans from '~/core/ui/Trans';
 import Alert from '~/core/ui/Alert';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/core/ui/card';
+import Label from "~/core/ui/Label"
+import Modal from "~/core/ui/Modal"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '~/core/ui/tabs';
 
 // Initialize Supabase client
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
@@ -25,7 +41,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
         partnerName: '',
         partnershipType: 'sent',
         duration: '',
-        fundingAmount: '',
+        fundingAmount: '0',
         details: '',
         sender_id: '1',
     });
@@ -74,97 +90,106 @@ const CreatePartnershipModalToggle: React.FC = () => {
             setError(error.message);
         }
     };
-
+        
     return (
         <>
             <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
                 <PlusCircleIcon className={'w-4 mr-2'} />
                 <span>Add Partnership</span>
-            </Button>
-            {isOpen && (
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                    <DialogContent>
-                        <DialogTitle>Create New Partnership</DialogTitle>
-                        <form onSubmit={handleSubmit}>
-                        <div>
-                          <TextField>
-                            <TextField.Label>
-                              <Trans i18nKey={'Desired Recepient'} />
+                </Button>
 
-                              <TextField.Input
-                                data-cy={'create-partnership-name-input'}
-                                name={'partnerName'}
-                                required
-                                minLength={2}
-                                maxLength={50}
-                                placeholder={'Coinbase'}
-                                value={formData.partnerName}
-                                onChange={handleChange}
-                              />
-                            </TextField.Label>
-                          </TextField>
-                          <TextField>
-                            <TextField.Label>
-                              <Trans i18nKey={'Partnership Details'} />
+              <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="Create New Partnership">
+              <form onSubmit={handleSubmit} className="space-y-4"> 
+              <Tabs defaultValue="Recepient" className="w-full max-w-xl">
+                <TabsList className="grid grid-cols-3 gap-5">
+                  <TabsTrigger value="Recipient">Recipient</TabsTrigger>
+                  <TabsTrigger value="Details">Details</TabsTrigger>
+                  <TabsTrigger value="KPI">KPI's</TabsTrigger>
+                </TabsList>
 
-                              <TextField.Input
-                                data-cy={'create-partnership-name-input'}
-                                name={'details'}
-                                required
-                                minLength={2}
-                                maxLength={50}
-                                placeholder={'BASE Technical Workshops'}
-                                value={formData.details}
-                                onChange={handleChange}
-                              />
-                            </TextField.Label>
-                            <TextField>
-                            <TextField.Label>
-                              <Trans i18nKey={'Funding'} />
+                <TabsContent value="Recipient">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Partnership Recipient</CardTitle>
+                      <CardDescription>
+                        Give a breif description of your partnership and who you want to send it to
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="name">Organization Name</Label>
+                        <TextField.Input id="name" defaultValue="" type="search" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="username">Short Description</Label>
+                        <TextField.Input id="details" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
 
-                              <TextField.Input
-                                data-cy={'create-partnership-name-input'}
-                                name={'fundingAmount'}
-                                required
-                                minLength={2}
-                                maxLength={50}
-                                placeholder={'$550'}
-                                value={formData.fundingAmount}
-                                onChange={handleChange}
-                              />
-                            </TextField.Label>
-                          </TextField>
-                          <TextField>
-                            <TextField.Label>
-                              <Trans i18nKey={'Duration'} />
-                              <TextField.Input
-                                data-cy={'create-partnership-name-input'}
-                                name={'duration'}
-                                required
-                                minLength={2}
-                                maxLength={50}
-                                placeholder={'4 Weeks'}
-                                value={formData.duration}
-                                onChange={handleChange}
-                              />
-                            </TextField.Label>
-                          </TextField>
-                          </TextField>
-                        </div>
-                        
-                        <div>
-
-                        </div>
-                        <div>
-                          <Button type="submit">Create Partnership</Button>
-                          <Button type="button" onClick={() => setIsOpen(false)}>Cancel</Button>
-                        </div>
-                      </form>
-                    </DialogContent>
-                </Dialog>
-            )}
-        </>
-    );
+                <TabsContent value="Details">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Details</CardTitle>
+                      <CardDescription>
+                        Describe your partnership details
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="current">Type of Partnership</Label>
+                        <TextField.Input id="current"  />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="new">Start Date</Label>
+                        <TextField.Input id="new" type="month" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="new">End Date</Label>
+                        <TextField.Input id="new" type="month" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="funding">Funding</Label>
+                        <TextField.Input id="funding" type="number" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="funding">Short Description</Label>
+                        <TextField.Input id="funding"  />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="KPI">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>KPI's for the partnership</CardTitle>
+                      <CardDescription>
+                        Create all the KPI's needed for the partnership.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="name">Goal</Label>
+                        <TextField.Input id="name" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="username">Short Description</Label>
+                        <TextField.Input id="details" />
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Modal.CancelButton onClick={() => setIsOpen(false)}><Trans i18nKey={'common:cancel'} /></Modal.CancelButton>
+                      <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+              </form>
+              
+            </Modal>
+</>
+);
 };
 
-export default CreatePartnershipModalToggle;
+export default CreatePartnershipModalToggle; 
