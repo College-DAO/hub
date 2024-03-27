@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import { Dialog, DialogContent, DialogTitle } from '~/core/ui/Dialog';
 import Button from '~/core/ui/Button';
@@ -27,7 +27,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '~/core/ui/tabs';
-
+import useCurrentOrganization from "~/lib/organizations/hooks/use-current-organization";
 // Initialize Supabase client
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
@@ -40,9 +40,12 @@ const CreatePartnershipModalToggle: React.FC = () => {
         partnershipFormat: string;
         durationStart: string;
         durationEnd: string;
-        fundingAmount: string;
+        fundingAmount:  number | undefined;
         details: string;
-        sender_id: string;
+        sender_id: number | undefined;
+        sender_name: string | undefined;
+        receiver_id: number | undefined;
+        recepient_name: string | undefined;
         kpis: Kpi[];
     }>({
         partnerName: '',
@@ -51,14 +54,31 @@ const CreatePartnershipModalToggle: React.FC = () => {
         partnershipFormat: '',
         durationStart: '',
         durationEnd: '',
-        fundingAmount: '0',
+        fundingAmount: 0,
         details: '',
-        sender_id: '1',
+        sender_id: 1,
+        sender_name:'',
+        receiver_id: 1,
+        recepient_name: '',
         kpis: [],
     });
     const [error, setError] = useState<string | null>(null);
 
-  
+    const organzation = useCurrentOrganization();
+    const org_id = organzation?.id;
+    const org_name = organzation?.name
+    
+
+    useEffect(() => {
+      // Update formData whenever org_id changes and is not undefined
+      if (org_id) {
+          setFormData(prevFormData => ({
+              ...prevFormData,
+              sender_id: org_id,
+              sender_name: org_name
+          }));
+      }
+  }, [org_id]);
     
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;

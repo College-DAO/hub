@@ -10,7 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { partnerName, partnershipType, duration, fundingAmount, sender_id, kpis} = req.body;
+    const { partnerName, partnershipType, duration, fundingAmount, sender_id, kpis, sender_name} = req.body;
     const { data, error } = await supabase
       .from('partnerships')
       .insert([
@@ -20,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           duration: duration,
           funding: fundingAmount,
           sender_id: sender_id, 
-          kpis: kpis
+          kpis: kpis,
+          sender_name:sender_name,
         },
       ]);
 

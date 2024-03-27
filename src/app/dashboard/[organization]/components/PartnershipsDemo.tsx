@@ -12,6 +12,7 @@ import { getPartnerships } from '~/lib/partnerships/queries'
 import Partnership from '~/lib/partnerships/partnership';
 import useSWR from 'swr';
 import useSupabase from '~/core/hooks/use-supabase';
+import useCurrentOrganization from "~/lib/organizations/hooks/use-current-organization";
 
 import {
   Table,
@@ -26,7 +27,7 @@ interface PartnershipsTableProps {
   type: 'sent' | 'received';
 }
 
-export default async function PartnershipsDemo() {
+export default function PartnershipsDemo() {
   const mrr = useMemo(() => generateDemoData(), []);
   const visitors = useMemo(() => generateDemoData(), []);
   const returningVisitors = useMemo(() => generateDemoData(), []);
@@ -50,7 +51,7 @@ export default async function PartnershipsDemo() {
       </div>
       <div>
         <Tile>
-          <Tile.Heading>Accepted Requests</Tile.Heading>
+          <Tile.Heading>Received Requests</Tile.Heading>
           <Tile.Body>
             <PartnershipsTable type="received" />
           </Tile.Body>
@@ -110,18 +111,20 @@ function Chart(
     </div>
   );
 }
+
 function PartnershipsTable({ type }: PartnershipsTableProps) {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const organzation = useCurrentOrganization();
+  const org_id = organzation?.id;
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // This is the updated fetch request
-        const response = await fetch(`/api/partnerships?type=${type}`, {
-          method: 'GET', // Method is optional because 'GET' is the default value
+        const response = await fetch(`/api/partnerships?type=${type}&userId=${org_id}`, {
+          method: 'GET', 
           headers: {
             'Content-Type': 'application/json',
           },
@@ -161,7 +164,7 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
       <TableBody>
         {partnerships.map((partnership) => (
           <TableRow key={partnership.id}>
-            <TableCell>{partnership.sender_id}</TableCell>
+            <TableCell>{partnership.sender_name}</TableCell>
             <TableCell>{partnership.receiver_id}</TableCell>
             <TableCell>{partnership.type}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
