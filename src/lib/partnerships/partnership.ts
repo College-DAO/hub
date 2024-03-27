@@ -7,6 +7,7 @@ interface Partnership {
     funding: any
     status: any
     sender_name: any
+    partner_name: any
     // Adjust the type as necessary
     // Add any other fields that might be included in your partnership records
   }

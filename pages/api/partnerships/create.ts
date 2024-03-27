@@ -10,20 +10,32 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { partnerName, partnershipType, duration, fundingAmount, sender_id, kpis, sender_name} = req.body;
-    const { data, error } = await supabase
-      .from('partnerships')
-      .insert([
-        {
-          partner_name: partnerName,
-          type: partnershipType,
+    const { partnerName, partnershipType, duration, fundingAmount, sender_id, kpis, sender_name, receiver_id} = req.body;
+    const partnerships = [
+      {
+        partner_name: partnerName,
+        type: 'sent', // The sender initiates this type
+        duration: duration,
+        funding: fundingAmount,
+        sender_id: sender_id,
+        kpis: kpis,
+        sender_name: sender_name,
+        receiver_id: receiver_id,
+      },
+      {
+        partner_name: partnerName,
+          type: 'received',
           duration: duration,
           funding: fundingAmount,
           sender_id: sender_id, 
           kpis: kpis,
           sender_name:sender_name,
-        },
-      ]);
+          receiver_id: receiver_id
+      }
+    ];
+    const { data, error } = await supabase
+      .from('partnerships')
+      .insert(partnerships);
 
       if (error) {
         console.error('Supabase Error', { 

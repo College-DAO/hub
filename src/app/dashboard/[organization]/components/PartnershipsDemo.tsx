@@ -165,7 +165,7 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
         {partnerships.map((partnership) => (
           <TableRow key={partnership.id}>
             <TableCell>{partnership.sender_name}</TableCell>
-            <TableCell>{partnership.receiver_id}</TableCell>
+            <TableCell>{partnership.partner_name}</TableCell>
             <TableCell>{partnership.type}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.duration}</TableCell>
