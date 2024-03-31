@@ -62,6 +62,14 @@ const NAVIGATION_CONFIG = (organization: string): NavigationConfig => ({
       end: true,
     },
     {
+      label: 'Zones',
+      path: getPath(organization, '/zones'),
+      Icon: ({ className }: { className: string }) => {
+        return <BriefcaseIcon className={className} />;
+      },
+      end: true,
+    },
+    {
       label: 'common:settingsTabLabel',
       collapsible: false,
       children: [
