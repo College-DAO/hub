@@ -10,8 +10,8 @@ enum Themes {
 
 const configuration = {
   site: {
-    name: 'Awesomely - Your SaaS Title',
-    description: 'Your SaaS Description',
+    name: 'College DAO Hub',
+    description: 'College DAO Hub',
     themeColor: '#ffffff',
     themeColorDark: '#0a0a0a',
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
@@ -56,7 +56,7 @@ const configuration = {
     onboarding: `/onboarding`,
     appPrefix: '/dashboard',
     appHome: '/dashboard',
-    partnershups: '/partnerships',
+    partnerships: '/partnerships',
     authCallback: '/auth/callback',
     settings: {
       profile: 'settings/profile',
