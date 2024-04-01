@@ -52,7 +52,7 @@ function drawNodeCanvasObject(
 
   const image = currentNode.logoUrl ? images[currentNode.logoUrl] : null;
   drawNode(ctx, currentNode, isFaded, isFocusedZone, isSelectedZone, globalScale, image);
-
+    
   if (isFaded) {
     return;
   }
@@ -75,11 +75,28 @@ function drawNode(
     return;
   }
 
-  const fillStyleOpecity = isFaded ? '0D' : '1A';
+  const fillStyleOpecity = isFaded ? '0D' : 'AA';
   const borderStyleOpacity = isFaded ? '1E' : isFocusedZone ? 'FF' : 'CD';
+  
+  let fillColor = '#FFFFFF';
+
   if (color) {
-    ctx.strokeStyle = `${color}${borderStyleOpacity}`;
-    ctx.fillStyle = `${color}${fillStyleOpecity}`;
+    switch (color) {
+      case '#22aaff':
+        fillColor = '#FFFFFF'; 
+        break;
+      case '#ee11cc': 
+        fillColor = '#A9D0FF'; // Change to your desired color
+        break;
+      // Add more cases for other colors if needed
+      default:
+        fillColor = '#9BE9CC'; // Default to white for other colors
+        break;
+  }
+}
+  if (color) {
+    ctx.strokeStyle = `${fillColor}${borderStyleOpacity}`;
+    ctx.fillStyle = `${fillColor}${fillStyleOpecity}`;
     ctx.beginPath();
     ctx.lineWidth = 1 / globalScale;
 
@@ -118,6 +135,7 @@ function drawNode(
     ctx.shadowColor = null as any;
     ctx.shadowBlur = null as any;
   }
+  console.log(ctx)
 }
 
 export const useNodeCanvasObject = (

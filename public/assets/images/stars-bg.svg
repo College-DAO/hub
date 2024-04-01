@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Extensively populated starry background -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 1700 701" style="enable-background:new 0 0 1700 701;" xml:space="preserve">
+<style type="text/css">
+    .st0{fill:#FFFFFF;} /* White stars */
+    .small { opacity: 0.6; }
+    .medium { opacity: 0.8; }
+    .large { opacity: 1; }
+</style>
+<rect width="100%" height="100%" fill="black"/> <!-- Background rectangle -->
+<g id="stars">
+    <!-- Example Small Stars -->
+    <circle class="st0 small" cx="100" cy="150" r="1"/>
+    <circle class="st0 small" cx="150" cy="120" r="1.2"/>
+	<!-- More Small Stars -->
+<!-- More Small Stars -->
+	<circle class="st0 small" cx="123" cy="234" r="1.0"/>
+	<circle class="st0 small" cx="76" cy="98" r="0.9"/>
+	<circle class="st0 small" cx="289" cy="157" r="1.1"/>
+	<circle class="st0 small" cx="467" cy="211" r="0.8"/>
+	<circle class="st0 small" cx="532" cy="180" r="1.2"/>
+	<circle class="st0 small" cx="611" cy="246" r="1.0"/>
+	<circle class="st0 small" cx="753" cy="89" r="1.1"/>
+	<circle class="st0 small" cx="842" cy="322" r="0.9"/>
+	<circle class="st0 small" cx="912" cy="143" r="1.2"/>
+	<circle class="st0 small" cx="975" cy="210" r="1.0"/>
+	<circle class="st0 small" cx="1033" cy="278" r="1.1"/>
+	<circle class="st0 small" cx="1101" cy="345" r="0.9"/>
+	<circle class="st0 small" cx="1172" cy="112" r="1.0"/>
+	<circle class="st0 small" cx="1258" cy="189" r="0.8"/>
+	<circle class="st0 small" cx="1324" cy="256" r="1.2"/>
+	<circle class="st0 small" cx="1392" cy="78" r="1.0"/>
+	<circle class="st0 small" cx="1475" cy="145" r="1.1"/>
+	<circle class="st0 small" cx="1557" cy="212" r="0.9"/>
+	<circle class="st0 small" cx="1621" cy="279" r="1.0"/>
+	<circle class="st0 small" cx="1690" cy="346" r="0.8"/>
+	<circle class="st0 small" cx="1610" cy="130" r="0.8"/>
+<circle class="st0 small" cx="130" cy="410" r="1.0"/>
+<circle class="st0 small" cx="290" cy="500" r="0.9"/>
+<circle class="st0 small" cx="470" cy="610" r="1.1"/>
+<circle class="st0 small" cx="530" cy="320" r="1.2"/>
+<circle class="st0 small" cx="610" cy="430" r="1.0"/>
+<circle class="st0 small" cx="750" cy="540" r="1.1"/>
+<circle class="st0 small" cx="840" cy="250" r="0.9"/>
+<circle class="st0 small" cx="910" cy="360" r="1.2"/>
+<circle class="st0 small" cx="970" cy="470" r="1.0"/>
+<circle class="st0 small" cx="1030" cy="580" r="1.1"/>
+<circle class="st0 small" cx="1100" cy="290" r="0.9"/>
+<circle class="st0 small" cx="1170" cy="400" r="1.0"/>
+<circle class="st0 small" cx="1250" cy="510" r="0.8"/>
+<circle class="st0 small" cx="1320" cy="620" r="1.2"/>
+<circle class="st0 small" cx="1380" cy="330" r="1.0"/>
+<circle class="st0 small" cx="1450" cy="440" r="1.1"/>
+<circle class="st0 small" cx="1520" cy="550" r="0.9"/>
+<circle class="st0 small" cx="1580" cy="260" r="1.0"/>
+<circle class="st0 small" cx="1650" cy="370" r="0.8"/>
+<circle class="st0 small" cx="1710" cy="480" r="1.2"/>
+
+<!-- Note: Continue adding more circles as needed -->
+
+<!-- Note: Continue adding more circles as needed -->
+
+    <!-- Example Medium Stars -->
+    <circle class="st0 medium" cx="200" cy="300" r="2"/>
+    <circle class="st0 medium" cx="250" cy="320" r="2.2"/>
+	<circle class="st0 medium" cx="198" cy="403" r="2.0"/>
+	<circle class="st0 medium" cx="264" cy="470" r="2.1"/>
+	<circle class="st0 medium" cx="332" cy="537" r="2.2"/>
+	<circle class="st0 medium" cx="401" cy="604" r="2.0"/>
+	<circle class="st0 medium" cx="469" cy="671" r="2.1"/>
+	<circle class="st0 medium" cx="537" cy="403" r="2.2"/>
+	<circle class="st0 medium" cx="605" cy="470" r="2.0"/>
+	<circle class="st0 medium" cx="673" cy="537" r="2.1"/>
+	<circle class="st0 medium" cx="741" cy="604" r="2.2"/>
+	<circle class="st0 medium" cx="809" cy="671" r="2.0"/>
+	<circle class="st0 medium" cx="877" cy="403" r="2.1"/>
+	<circle class="st0 medium" cx="945" cy="470" r="2.2"/>
+	<circle class="st0 medium" cx="1013" cy="537" r="2.0"/>
+	<circle class="st0 medium" cx="1081" cy="604" r="2.1"/>
+	<circle class="st0 medium" cx="1230" cy="303" r="2.0"/>
+<circle class="st0 medium" cx="1310" cy="412" r="2.1"/>
+<circle class="st0 medium" cx="1390" cy="521" r="2.2"/>
+<circle class="st0 medium" cx="1470" cy="630" r="2.0"/>
+<circle class="st0 medium" cx="1550" cy="239" r="2.1"/>
+<circle class="st0 medium" cx="1630" cy="348" r="2.2"/>
+<circle class="st0 medium" cx="1710" cy="457" r="2.0"/>
+<circle class="st0 medium" cx="1790" cy="566" r="2.1"/>
+<circle class="st0 medium" cx="1870" cy="675" r="2.2"/>
+<circle class="st0 medium" cx="1950" cy="284" r="2.0"/>
+<circle class="st0 medium" cx="2030" cy="393" r="2.1"/>
+<circle class="st0 medium" cx="2110" cy="502" r="2.2"/>
+<circle class="st0 medium" cx="2190" cy="611" r="2.0"/>
+<circle class="st0 medium" cx="2270" cy="220" r="2.1"/>
+<circle class="st0 medium" cx="2350" cy="329" r="2.2"/>
+
+	<circle class="st0 medium" cx="1149" cy="671" r="2.2"/>
+    <!-- Additional stars omitted for brevity -->
+    <!-- Example Large Stars -->
+    <circle class="st0 large" cx="300" cy="250" r="3"/>
+    <circle class="st0 large" cx="350" cy="220" r="3.2"/>
+	<!-- More Large Stars -->
+<circle class="st0 large" cx="600" cy="150" r="3.0"/>
+<circle class="st0 large" cx="680" cy="220" r="3.2"/>
+<circle class="st0 large" cx="760" cy="290" r="3.1"/>
+<circle class="st0 large" cx="840" cy="360" r="3.3"/>
+<circle class="st0 large" cx="920" cy="430" r="3.0"/>
+<circle class="st0 large" cx="1000" cy="500" r="3.2"/>
+<circle class="st0 large" cx="1080" cy="570" r="3.1"/>
+<circle class="st0 large" cx="1160" cy="640" r="3.3"/>
+<circle class="st0 large" cx="1240" cy="150" r="3.2"/>
+<circle class="st0 large" cx="1320" cy="220" r="3.0"/>
+<circle class="st0 large" cx="1400" cy="290" r="3.2"/>
+<circle class="st0 large" cx="1480" cy="360" r="3.1"/>
+<circle class="st0 large" cx="1560" cy="430" r="3.3"/>
+<circle class="st0 large" cx="1640" cy="500" r="3.0"/>
+<!-- Note: Continue adding more circles as needed -->
+
+    <!-- Additional stars omitted for brevity -->
+</g>
+</svg>

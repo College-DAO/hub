@@ -10,7 +10,7 @@ import { useZonesAdditionalInfo } from '../hooks/useMapAdditionalData';
 import { useNodeCanvasObject } from '../hooks/useNodeCanvasObject';
 import { MapLink, MapNode } from '../Types';
 
-const ZOOM_MIN_VALUE = 0.75;
+const ZOOM_MIN_VALUE = 0.6;
 const ZOOM_MAX_VALUE = 3.375;
 const ZOOM_RATIO = 1.5;
 

@@ -1,12 +1,14 @@
 .pageContainer {
   display: grid;
   grid-template-columns: 1fr 376px;
-
-  background: url('./assets/stars-bg.svg') center/contain var(--black-100);
+  background: url('/public/assets/images/zones_bg.png') no-repeat center center;
+  background-size: cover; // This will cover the entire area of .pageContainer
 }
 
 @media (max-width: 630px) {
   .pageContainer {
     grid-template-columns: 1fr;
+    background: url('/public/assets/images/zones_bg.png') no-repeat center center;
+    background-size: cover; // Ensures that the background covers the smaller viewport as well
   }
 }

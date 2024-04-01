@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import * as amplitude from '@amplitude/analytics-browser';
 import queryString from 'query-string';
-// import { useLocation } from 'react-router-dom';
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
+
 import { homePath, assetsPath, overviewPath, peersPath, zonesPath, swapPath } from '~/app/dashboard/[organization]/zones/routing';
 
 // import { useAssetsPageAnalytics } from './AssetsPage/useAssetsPageAnalytics';
@@ -13,8 +13,6 @@ import { homePath, assetsPath, overviewPath, peersPath, zonesPath, swapPath } fr
 import { Page, PAGE_TITLE } from './Types';
 // import { useZonesPageAnalytics } from './ZonesPage/useZonesPageAnalytics';
 import useDebounce from '../useDebounce';
-import { useLocation } from 'react-router-dom';
-
 
 export const getPageTitle = (pathname: string | null) => {
   if (!pathname) return '';
@@ -51,40 +49,40 @@ export const trackEvent = (event: string, data?: object) => {
   }
 };
 
-// export function useAnalytics() {
-//   const location = useRouter();
+export function useAnalytics() {
+  const location = useLocation();
 
-//   const [history, setHistory] = useState<Page[]>([]);
+  const [history, setHistory] = useState<Page[]>([]);
 
-//   const debouncedLocation = useDebounce(location, 500);
+  const debouncedLocation = useDebounce(location, 500);
 
-//   const currentPage = history[history.length - 1];
-//   const prevPage = history[history.length - 2];
+  const currentPage = history[history.length - 1];
+  const prevPage = history[history.length - 2];
 
-//   useEffect(() => {
-//     if (debouncedLocation) {
-//       setHistory((prevState) => {
-//         if (prevState[prevState.length - 1]?.key !== debouncedLocation.key) {
-//           return [
-//             ...prevState,
-//             {
-//               ...debouncedLocation,
-//               title: getPageTitle(debouncedLocation.pathname),
-//               search: queryString.parse(debouncedLocation.query),
-//             },
-//           ];
-//         }
+  useEffect(() => {
+    if (debouncedLocation) {
+      setHistory((prevState) => {
+        if (prevState[prevState.length - 1]?.key !== debouncedLocation.key) {
+          return [
+            ...prevState,
+            {
+              ...debouncedLocation,
+              title: getPageTitle(debouncedLocation.pathname),
+              search: queryString.parse(debouncedLocation.search),
+            },
+          ];
+        }
 
-//         return prevState;
-//       });
-//     }
-//   }, [debouncedLocation]);
+        return prevState;
+      });
+    }
+  }, [debouncedLocation]);
 
-//   //useMultipageAnalytics(currentPage, prevPage, history);
-//   useHomePageAnalytics(currentPage, prevPage);
-//   //useZonesPageAnalytics(currentPage, prevPage);
-//   //useAssetsPageAnalytics(currentPage, prevPage);
-//   //useSwapPageAnalytics(currentPage, prevPage);
+  //useMultipageAnalytics(currentPage, prevPage, history);
+  useHomePageAnalytics(currentPage, prevPage);
+  //useZonesPageAnalytics(currentPage, prevPage);
+  //useAssetsPageAnalytics(currentPage, prevPage);
+  //useSwapPageAnalytics(currentPage, prevPage);
 
-//   return trackEvent;
-// }
+  return trackEvent;
+}

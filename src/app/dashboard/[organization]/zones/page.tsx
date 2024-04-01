@@ -20,15 +20,15 @@ function ZonesPage() {
   return (
     <>
       <AppHeader
-        title={<Trans i18nKey={'Zones'} />}
-        description={<Trans i18nKey={'Map of Zones'} />}
+        title={<Trans i18nKey={'CollegeDAO Hub'} />}
+        description={<Trans i18nKey={'Map of the ecossytem'} />}
       >
       </AppHeader>
       <PageBody>
-      <div className={styles.pageContainer}>
-        {showMap && <MapContainerDynamic className={styles.map} />}
-      <Outlet />
-    </div>
+      <div className={styles.pageContainer} style={{ background: `url('/assets/images/stars-bg.svg') center/cover` }}>
+          {showMap && <MapContainerDynamic className={styles.map} />}
+          <Outlet />
+        </div>
       </PageBody>
     </>
   );

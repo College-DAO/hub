@@ -171,97 +171,97 @@ const CreatePartnershipModalToggle: React.FC = () => {
                 </TabsList>
 
                 <TabsContent value="Recipient">
-  <Card>
-    <CardHeader>
-      <CardTitle>Partnership Recipient</CardTitle>
-      <CardDescription>
-        Search and select the organization you want to send your partnership to.
-      </CardDescription>
-    </CardHeader>
-    <CardContent className="space-y-2">
-      <div className="space-y-1">
-        <Label htmlFor="searchOrganization">Search Organization</Label>
-            <TextField.Input
-              id="searchOrganization"
-              value={searchQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-              placeholder="Search organizations..."
-                              className="input-class" 
-                            />
-                            <ul className="search-results-class"> 
-                              {searchResults.map((org) => (
-                                <li key={org.id} onClick={(e) => handleSelectOrganization(org, e)} className="cursor-pointer">
-                                {org.name}
-                              </li>
-                              ))}
-                            </ul>
-                          </div>
-                          {/* Include the Partnership Name input here if needed */}
-                          <div className="space-y-1">
-                            <Label htmlFor="partnershipName">Partnership Name</Label>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Partnership Recipient</CardTitle>
+                      <CardDescription>
+                        Search and select the organization you want to send your partnership to.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="space-y-1">
+                        <Label htmlFor="searchOrganization">Search Organization</Label>
                             <TextField.Input
-                              id="partnershipName"
-                              name="partnershipName"
-                              value={formData.partnershipName}
-                              onChange={handleInputChange}
-                            />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </TabsContent>
-                    <TabsContent value="Details">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Partnership Detail</CardTitle>
-                          <CardDescription>
-                            Provide a brief description of your partnership
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="space-y-1">
-                            <Label htmlFor="partnershipFormat">Partnership Format</Label>
-                            <TextField.Input id="partnershipFormat" name="partnershipFormat" value={formData.partnershipFormat} onChange={handleInputChange} />
-                          </div>
-                          <div className="space-y-1">
-                            <Label htmlFor="durationStart">Start Date</Label>
-                            <TextField.Input id="durationStart" name="durationStart" value={formData.durationStart} onChange={handleInputChange}type="month" />
-                          </div>
-                          <div className="space-y-1">
-                            <Label htmlFor="durationEnd">End Date</Label>
-                            <TextField.Input id="durationEnd" name="durationEnd" value={formData.durationEnd} onChange={handleInputChange}type="month" />
-                          </div>
-                          <div className="space-y-1">
-                            <Label htmlFor="fundingAmount">Funding</Label>
-                            <TextField.Input id="fundingAmount" name="fundingAmount" value={formData.fundingAmount} onChange={handleInputChange}type="number" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </TabsContent>
-                    <TabsContent value="KPI">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>KPI's</CardTitle>
-                          
-                          <CardDescription>
-                            Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="space-y-1">
-                          <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({...formData, kpis: newKpis})} />
-                          </div>
-                          {/* Additional fields as needed */}
-                        </CardContent>
-                        <CardFooter className="flex justify-center">
-                      <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
-                    </CardFooter>
-                      </Card>
-                </TabsContent>
-              </Tabs>
+                              id="searchOrganization"
+                              value={searchQuery}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                              placeholder="Search organizations..."
+                                              className="input-class" 
+                                            />
+                                            <ul className="search-results-class"> 
+                                              {searchResults.map((org) => (
+                                                <li key={org.id} onClick={(e) => handleSelectOrganization(org, e)} className="cursor-pointer">
+                                                {org.name}
+                                              </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                          {/* Include the Partnership Name input here if needed */}
+                                          <div className="space-y-1">
+                                            <Label htmlFor="partnershipName">Partnership Name</Label>
+                                            <TextField.Input
+                                              id="partnershipName"
+                                              name="partnershipName"
+                                              value={formData.partnershipName}
+                                              onChange={handleInputChange}
+                                            />
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    </TabsContent>
+                                    <TabsContent value="Details">
+                                      <Card>
+                                        <CardHeader>
+                                          <CardTitle>Partnership Detail</CardTitle>
+                                          <CardDescription>
+                                            Provide a brief description of your partnership
+                                          </CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="space-y-2">
+                                          <div className="space-y-1">
+                                            <Label htmlFor="partnershipFormat">Partnership Format</Label>
+                                            <TextField.Input id="partnershipFormat" name="partnershipFormat" value={formData.partnershipFormat} onChange={handleInputChange} />
+                                          </div>
+                                          <div className="space-y-1">
+                                            <Label htmlFor="durationStart">Start Date</Label>
+                                            <TextField.Input id="durationStart" name="durationStart" value={formData.durationStart} onChange={handleInputChange}type="month" />
+                                          </div>
+                                          <div className="space-y-1">
+                                            <Label htmlFor="durationEnd">End Date</Label>
+                                            <TextField.Input id="durationEnd" name="durationEnd" value={formData.durationEnd} onChange={handleInputChange}type="month" />
+                                          </div>
+                                          <div className="space-y-1">
+                                            <Label htmlFor="fundingAmount">Funding</Label>
+                                            <TextField.Input id="fundingAmount" name="fundingAmount" value={formData.fundingAmount} onChange={handleInputChange}type="number" />
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    </TabsContent>
+                                    <TabsContent value="KPI">
+                                      <Card>
+                                        <CardHeader>
+                                          <CardTitle>KPI's</CardTitle>
+                                          
+                                          <CardDescription>
+                                            Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                                          </CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="space-y-2">
+                                          <div className="space-y-1">
+                                          <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({...formData, kpis: newKpis})} />
+                                          </div>
+                                          {/* Additional fields as needed */}
+                                        </CardContent>
+                                        <CardFooter className="flex justify-center">
+                                      <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
+                                    </CardFooter>
+                                      </Card>
+                                </TabsContent>
+                              </Tabs>
 
-              </form>
-              
-            </Modal>
+                              </form>
+                              
+                            </Modal>
 </>
 );
 };

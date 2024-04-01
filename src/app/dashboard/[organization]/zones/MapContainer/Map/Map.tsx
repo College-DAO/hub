@@ -47,22 +47,8 @@ export function Map({
           disableZoomIn={disableZoomIn}
           disableZoomOut={disableZoomOut}
         />
-      ) : (
-        <LazyMap2d
-        data={data}
-        selectedZoneKey={selectedZoneKey}
-        hoveredZoneKey={hoveredZoneKey}
-        onZoneClick={onZoneClick}
-        onZoneHover={onZoneHover}
-        height={height}
-        width={width}
-        images={images}
-        increaseZoom={increaseZoom}
-        decreaseZoom={decreaseZoom}
-        disableZoomIn={disableZoomIn}
-        disableZoomOut={disableZoomOut}
-      />
-      )}
+      ) 
+      : null}
     </>
   );
 }
