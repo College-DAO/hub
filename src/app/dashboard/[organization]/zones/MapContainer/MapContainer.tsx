@@ -4,7 +4,7 @@ import { Suspense, useCallback, useRef, useState } from 'react';
 
 import cn from 'classnames';
 import { motion } from 'framer-motion';
-
+import { Sidebar } from '../Sidebar/Sidebar';
 import { Icon2d, Icon3d, ZoomIn, ZoomOut } from '../assets/icons';
 import { Button } from '../components/ui/Button/Button';
 import { ButtonSize, ButtonVariant } from '../components/ui/Button/Button.props';
@@ -24,10 +24,9 @@ export default function MapContainer({ className }: MapContainerProps) {
   
   const increaseZoom = useRef<() => void | null>(null);
   const decreaseZoom = useRef<() => void | null>(null);
-
   const [isZoomInDisabled, setIsZoomInDisabled] = useState(false);
   const [isZoomOutDisabled, setIsZoomOutDisabled] = useState(false);
-
+  
   const onZoomIn = useCallback(() => {
     if (!isZoomInDisabled) {
       increaseZoom?.current && increaseZoom.current();
@@ -53,6 +52,7 @@ export default function MapContainer({ className }: MapContainerProps) {
             disableZoomIn={(value: boolean) => setIsZoomInDisabled(value)}
             disableZoomOut={(value: boolean) => setIsZoomOutDisabled(value)}
           />
+          <Sidebar  />
         </Suspense>
       </ErrorBoundary>
     </div>

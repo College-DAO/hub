@@ -135,7 +135,6 @@ function drawNode(
     ctx.shadowColor = null as any;
     ctx.shadowBlur = null as any;
   }
-  console.log(ctx)
 }
 
 export const useNodeCanvasObject = (

@@ -19,11 +19,6 @@ function ZonesPage() {
   const showMap = useShowMap();
   return (
     <>
-      <AppHeader
-        title={<Trans i18nKey={'CollegeDAO Hub'} />}
-        description={<Trans i18nKey={'Map of the ecossytem'} />}
-      >
-      </AppHeader>
       <PageBody>
       <div className={styles.pageContainer} style={{ background: `url('/assets/images/stars-bg.svg') center/cover` }}>
           {showMap && <MapContainerDynamic className={styles.map} />}

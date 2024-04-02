@@ -34,16 +34,10 @@ function DashboardPage() {
   return (
     <>
       <AppHeader
-        title={<Trans i18nKey={'common:dashboardTabLabel'} />}
-        description={<Trans i18nKey={'common:dashboardTabDescription'} />}
+        title={<Trans i18nKey={'CollegeDAO Hub'} />}
+        description={<Trans i18nKey={'Dashboard'} />}
       >
-        <Button size={'sm'} variant={'outline'}>
-          <PlusCircleIcon className={'w-4 mr-2'} />
-
-          <span>Add Widget</span>
-        </Button>
       </AppHeader>
-
       <PageBody>
         <Dashboard />
       </PageBody>

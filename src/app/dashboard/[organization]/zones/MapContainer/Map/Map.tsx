@@ -20,7 +20,7 @@ export function Map({
   const [selectedZoneKey, onZoneClick] = useSelectedZone();
   const [hoveredZoneKey, onZoneHover] = useHoveredZone();
   const { windowSize } = useWindowSizeWithDebounce(100);
-
+  
   const height = windowSize.height - 8;
   const width = windowSize.width - 376;
 

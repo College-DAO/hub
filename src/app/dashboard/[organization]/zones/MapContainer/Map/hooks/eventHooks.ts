@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { NodeObject } from 'react-force-graph-2d';
 import { useParams } from 'react-router-dom';
 
-// import { useNavigateWithSearchParams } from '~/app/dashboard/[organization]/zones/hooks/useNavigateWithSearchParams';
+//import { useNavigateWithSearchParams } from '~/app/dashboard/[organization]/zones/hooks/useNavigateWithSearchParams';
 import { overviewPath } from '~/app/dashboard/[organization]/zones/routing';
 
 import { HoveredZoneKeyType, MapNode, SelectedZoneKeyType } from '../Types';
@@ -34,17 +34,15 @@ export const useHoveredZone = () => {
 
 export const useSelectedZone = () => {
   const { zone: selectedZoneKey = undefined } = useParams<string>();
-
-  // const navigateWithSearchParams = useNavigateWithSearchParams();
-  // const trackSelectedZone = useHomePageSelectedZoneAnalytics();
-
+  
+  //const navigateWithSearchParams = useNavigateWithSearchParams();
+  
   const onZoneClick = useCallback(
     (node: NodeObject) => {
       const zone = node as MapNode;
       // navigateWithSearchParams(`${zone.zone}/${overviewPath}`, {
-      //   state: { source: SelectedZoneSourceView.Map },
+      //   state: { source: 'sidebar view' },
       // });
-      // trackSelectedZone(zone.zone);
     },
     []
   );
