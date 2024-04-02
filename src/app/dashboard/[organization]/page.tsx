@@ -8,7 +8,7 @@ import Trans from '~/core/ui/Trans';
 import Button from '~/core/ui/Button';
 import { PageBody } from '~/core/ui/Page';
 
-const DashboardDemo = loadDynamic(() => import('./components/DashboardDemo'), {
+const Dashboard = loadDynamic(() => import('./zones/page'), {
   ssr: false,
   loading: () => (
     <div
@@ -45,7 +45,7 @@ function DashboardPage() {
       </AppHeader>
 
       <PageBody>
-        <DashboardDemo />
+        <Dashboard />
       </PageBody>
     </>
   );
