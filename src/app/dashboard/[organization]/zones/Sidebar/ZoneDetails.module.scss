@@ -1,0 +1,62 @@
+.container {
+  height: calc(100vh - 105px);
+  margin: 0px 0px 0px 0;
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  background-color: #000000;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(15, 23, 42), 0 0 20px rgba(255, 255, 255, 0.2);
+  font-family: 'Roboto', sans-serif; // Added font family
+  color: #fff; // Added text color
+
+  .detailsTitle {
+    display: flex;
+    align-items: center;
+
+    .zoneLogo {
+      margin-right: 16px;
+    }
+
+    .zoneBaseInfo {
+      display: flex;
+      flex-direction: column;
+
+      .zoneName {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .zoneWebsite {
+        margin-top: 5px;
+        color: #8f8f96;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .closeIcon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    fill: #33333d;
+    stroke: #fff;
+
+    &:hover {
+      fill: #4f4f5a;
+    }
+  }
+
+  .pagesSwitcher {
+    margin-top: 20px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 630px) {
+    height: calc(100vh - 85px);
+    margin: 16px 8px;
+  }
+}
