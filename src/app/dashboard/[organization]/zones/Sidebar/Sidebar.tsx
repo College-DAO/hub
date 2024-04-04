@@ -10,11 +10,12 @@ import contentStyle from './ZoneDetails.module.scss';
 import { NumberFormat } from '../components/ui/NumberFormat';
 import { ScrollableContainer } from '../components/ui/ScrollableContainer/ScrollableContainer';
 import { NumberType } from '../components/ui/NumberFormat';
+import { ZoneOverviewItem } from './ZoneOverviewItem/ZoneOverviewItem';
 const data = {
   website: "https://cosmos.network",
   zone: "Cosmos Hub",
   logoUrl: "path/to/cosmos-logo.png",
-  name: "Cosmos Hub",
+  name: "Blockchain at Michigan",
 };
 
 function Sidebar() {
@@ -30,13 +31,13 @@ function Sidebar() {
           />
           <div className={contentStyle.zoneBaseInfo}>
             <SkeletonTextWrapper
-              defaultText="Cosmos hub"
+              defaultText="cosmos"
               className={contentStyle.zoneName}
             >
               {data.name}
             </SkeletonTextWrapper>
             <SkeletonTextWrapper
-              defaultText="https://cosmos.network"
+              defaultText="httpss://cosmos.network"
               className={contentStyle.zoneWebsite}
             >
               {data.website && (
@@ -52,88 +53,61 @@ function Sidebar() {
         </div>
         <ButtonGroup className={contentStyle.pagesSwitcher}>
         </ButtonGroup>
-        <ScrollableContainer className={styles.container}>
-        <IbcVolumeCard />
         <div className={styles.detailedInfo}>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={'Total Txs'}
-            period={period}
-            value={data?.totalTxs}
-            loading={loading}
-            defaultLoadingValue={'1 156 288'}
-            tooltipText={tooltips['totalTxs']()}
+            title={'Bio'}
+            defaultLoadingValue={""}
+            //value={156}
           ></ZoneOverviewItem>
 
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'IBC Transfers'}
-            period={period}
-            value={data?.ibcTransfers}
-            loading={loading}
             defaultLoadingValue={'72 235'}
-            tooltipText={tooltips['ibcTransfers']()}
+            //value = {100}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'Peers'}
-            value={data?.peersCount}
-            loading={loading}
             defaultLoadingValue={'12'}
-            tooltipText={tooltips['peersCount']()}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'Channels'}
-            value={data?.channelsCount}
-            loading={loading}
             defaultLoadingValue={'250'}
-            tooltipText={tooltips['channelsCount']()}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={dauTitle}
-            loading={loading}
-            value={data?.dau}
-            tooltipText={tooltips['dau'](period)}
+            title={"dauTitle"}
+            value={0}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={`IBC ${dauTitle}`}
-            loading={loading}
-            defaultLoadingValue={`2 345 (99,8% of ${dauTitle})`}
-            tooltipText={tooltips['ibcDau'](period)}
+            title={`IBC`}
           >
-            <NumberFormat value={data?.ibcDau} />
+            <NumberFormat value={0} />
             <span className={styles.additionalInfo}>
               {' '}
-              (<NumberFormat value={data?.ibcDauPercent} numberType={NumberType.Percent} />
-              {` of ${dauTitle}`})
+              (<NumberFormat value={0} numberType={NumberType.Percent} />
+              {` of ${0}`})
             </span>
           </ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'Token Price'}
-            loading={loading}
             defaultLoadingValue={'$10.45'}
           >
-            <NumberFormat value={data?.price} numberType={NumberType.Currency} />
-            <span className={styles.additionalInfo}> {data?.tokenSymbol}</span>
+            <NumberFormat value={0} numberType={NumberType.Currency} />
+            <span className={styles.additionalInfo}> {0}</span>
           </ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'Market Cap'}
-            value={data?.marketCap}
-            loading={loading}
             defaultLoadingValue={'$123,456,789'}
-            tooltipText={tooltips['marketCap']()}
           ></ZoneOverviewItem>
         </div>
-      </ScrollableContainer>
-
-      <ShowDetailsButton title="See Zone Details" primary onClick={onDetailedBtnClick} />
-    </>
-    </Card>
+      </Card>
   );
 }
 
