@@ -10,7 +10,7 @@ import { Button } from '../components/ui/Button/Button';
 import { ButtonSize, ButtonVariant } from '../components/ui/Button/Button.props';
 import { DefaultErrorFallback } from '../ErrorBoundary';
 import { ErrorBoundary } from '../ErrorBoundary/ErrorBoundary';
-
+import { useHoveredZone, useSelectedZone, useClearSelectedNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/hooks/eventHooks';
 import { useGraphData } from './Map/hooks/useGraphData';
 import { Map } from './Map/Map';
 import styles from './MapContainer.module.scss';
@@ -19,14 +19,24 @@ import { DefaultMapType, MapType } from './MapContainer.types';
 import { MapLegend } from './MapLegend';
 import { nodes, links } from '../mock_data';
 import nodeData from '../data.json'
+import {MapNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/Types';
+import { NodeObject } from 'react-force-graph-2d';
 
 export default function MapContainer({ className }: MapContainerProps) {
   
   const increaseZoom = useRef<() => void | null>(null);
   const decreaseZoom = useRef<() => void | null>(null);
   const [isZoomInDisabled, setIsZoomInDisabled] = useState(false);
-  const [isZoomOutDisabled, setIsZoomOutDisabled] = useState(false);
+  const [isZoomOutDisabled, setIsZoomOutDisabled] = useState(false);  
   
+  const [selectedZoneKey, onZoneClick, selectedZone, clearSelectedZone] = useSelectedZone();
+
+  const handleZoneClick = useCallback((node: NodeObject) => {
+    const zone = node as MapNode;
+    onZoneClick(node);
+    console.log("click");
+  }, [onZoneClick]);
+
   const onZoomIn = useCallback(() => {
     if (!isZoomInDisabled) {
       increaseZoom?.current && increaseZoom.current();
@@ -51,8 +61,9 @@ export default function MapContainer({ className }: MapContainerProps) {
             decreaseZoom={decreaseZoom}
             disableZoomIn={(value: boolean) => setIsZoomInDisabled(value)}
             disableZoomOut={(value: boolean) => setIsZoomOutDisabled(value)}
+            onZoneClick={handleZoneClick}
           />
-          <Sidebar  />
+          {selectedZone && <Sidebar selectedZone={selectedZone} />}
         </Suspense>
       </ErrorBoundary>
     </div>

@@ -54,7 +54,7 @@ export default function Map2d({
 
   const linkCanvasObject = useLinkCanvasObject(selectedZoneKey, hoveredZoneKey);
 
-  const clearSelectedNode = useClearSelectedNode(selectedZoneKey);
+  const clearSelectedNode = useClearSelectedNode();
 
   const zoom = useCallback((value: number) => {
     graphRef.current?.zoom(value, 500);
@@ -81,6 +81,7 @@ export default function Map2d({
     disableZoomOut(zoomValue <= ZOOM_MIN_VALUE);
   }, [disableZoomIn, disableZoomOut, zoomValue]);
 
+  
   return (
     <>
       {selectedZoneKey && !stopDisplayingPopup && showDetailedButton && (

@@ -16,8 +16,9 @@ export function Map({
   data,
   disableZoomIn,
   disableZoomOut,
+  onZoneClick,
 }: MapProps) {
-  const [selectedZoneKey, onZoneClick] = useSelectedZone();
+  const [selectedZoneKey, handleZoneClick] = useSelectedZone();
   const [hoveredZoneKey, onZoneHover] = useHoveredZone();
   const { windowSize } = useWindowSizeWithDebounce(100);
   

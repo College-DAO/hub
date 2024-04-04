@@ -11,14 +11,25 @@ import { NumberFormat } from '../components/ui/NumberFormat';
 import { ScrollableContainer } from '../components/ui/ScrollableContainer/ScrollableContainer';
 import { NumberType } from '../components/ui/NumberFormat';
 import { ZoneOverviewItem } from './ZoneOverviewItem/ZoneOverviewItem';
-const data = {
-  website: "https://cosmos.network",
-  zone: "Cosmos Hub",
-  logoUrl: "path/to/cosmos-logo.png",
-  name: "Blockchain at Michigan",
-};
+import {MapNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/Types';
 
-function Sidebar() {
+interface SidebarProps {
+  selectedZone: MapNode | null;
+}
+function Sidebar({ selectedZone }: SidebarProps) {
+  const data = selectedZone
+    ? {
+        website: selectedZone.website,
+        zone: selectedZone.zone,
+        logoUrl: selectedZone.logoUrl,
+        name: selectedZone.name,
+      }
+    : {
+        website: '',
+        zone: '',
+        logoUrl: '',
+        name: '',
+      };
   return (
     <Card className={contentStyle.container}>
         <div className={contentStyle.detailsTitle}>

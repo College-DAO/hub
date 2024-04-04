@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect} from 'react';
 
 import { NodeObject } from 'react-force-graph-2d';
 import { useParams } from 'react-router-dom';
@@ -8,14 +8,31 @@ import { overviewPath } from '~/app/dashboard/[organization]/zones/routing';
 
 import { HoveredZoneKeyType, MapNode, SelectedZoneKeyType } from '../Types';
 
-export const useClearSelectedNode = (selectedZoneKey: SelectedZoneKeyType) => {
-  // const navigateWithSearchParams = useNavigateWithSearchParams();
+export const useClearSelectedNode = () => {
+  const { zone: selectedZoneKey = undefined } = useParams<string>();
 
-  return useCallback(() => {
-    if (selectedZoneKey) {
-      // navigateWithSearchParams('');
+  const [selectedZone, setSelectedZone] = useState<MapNode | null>(null);
+  console.log("clears")
+  const onZoneClick = useCallback(
+    (node: NodeObject) => {
+      const zone = node as MapNode;
+      setSelectedZone(zone);
+      console.log("fortnite")
+    },
+    []
+  );
+
+  const clearSelectedZone = useCallback(() => {
+    setSelectedZone(null);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedZoneKey) {
+      clearSelectedZone();
     }
-  }, [selectedZoneKey]);
+  }, [selectedZoneKey, clearSelectedZone]);
+
+  return clearSelectedZone;
 };
 
 export const useHoveredZone = () => {
@@ -34,18 +51,25 @@ export const useHoveredZone = () => {
 
 export const useSelectedZone = () => {
   const { zone: selectedZoneKey = undefined } = useParams<string>();
-  
-  //const navigateWithSearchParams = useNavigateWithSearchParams();
-  
+  const [selectedZone, setSelectedZone] = useState<MapNode | null>(null);
+
   const onZoneClick = useCallback(
     (node: NodeObject) => {
       const zone = node as MapNode;
-      // navigateWithSearchParams(`${zone.zone}/${overviewPath}`, {
-      //   state: { source: 'sidebar view' },
-      // });
+      setSelectedZone(zone);
     },
     []
   );
 
-  return [selectedZoneKey, onZoneClick] as const;
+  const clearSelectedZone = useCallback(() => {
+    setSelectedZone(null);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedZoneKey) {
+      clearSelectedZone();
+    }
+  }, [selectedZoneKey, clearSelectedZone]);
+
+  return [selectedZoneKey, onZoneClick, selectedZone, clearSelectedZone] as const;
 };
