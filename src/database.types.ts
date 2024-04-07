@@ -83,23 +83,33 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          logo_url: string | null
-          name: string
           uuid: string
+          name: string
+          email: string
+          type: string
+          approved: boolean;
+          socials: Object
+          logo_url: string | null
         }
         Insert: {
           created_at?: string
           id?: never
-          logo_url?: string | null
-          name: string
           uuid?: string
+          name: string
+          email: string
+          type?: string
+          socials?: Object
+          logo_url?: string | null
         }
         Update: {
           created_at?: string
           id?: never
-          logo_url?: string | null
-          name?: string
           uuid?: string
+          name?: string
+          email?: string
+          type?: string
+          socials?: Object
+          logo_url?: string | null
         }
         Relationships: []
       }

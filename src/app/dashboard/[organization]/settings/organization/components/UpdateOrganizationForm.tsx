@@ -23,11 +23,17 @@ const UpdateOrganizationForm = () => {
   const { t } = useTranslation('organization');
 
   const currentOrganizationName = organization?.name ?? '';
+  const currentOrganizationEmail = organization?.email ?? '';
+  const currentOrganizationType = organization?.type ?? '';
+  const currentOrganizationSocials = organization?.socials;
   const organizationId = organization?.id as number;
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       name: currentOrganizationName,
+      email: currentOrganizationEmail,
+      type: currentOrganizationType,
+      socials: currentOrganizationSocials,
     },
   });
 
@@ -50,7 +56,7 @@ const UpdateOrganizationForm = () => {
   );
 
   const onSubmit = useCallback(
-    async (organizationName: string) => {
+    async (organizationInput: Partial<Organization>) => {
       const organizationId = organization?.id;
 
       if (!organizationId) {
@@ -61,7 +67,10 @@ const UpdateOrganizationForm = () => {
 
       const organizationData: WithId<Partial<Organization>> = {
         id: organizationId,
-        name: organizationName,
+        name: organizationInput.name,
+        email: organizationInput.email,
+        type: organizationInput.type,
+        socials: organizationInput.socials,
       };
 
       return updateOrganizationData(organizationData);
@@ -72,11 +81,26 @@ const UpdateOrganizationForm = () => {
   useEffect(() => {
     reset({
       name: organization?.name,
+      email: organization?.email,
+      type: organization?.type,
+      socials: organization?.socials,
     });
   }, [organization, reset]);
 
   const nameControl = register('name', {
     required: true,
+  });
+
+  const emailControl = register('email', {
+    required: false,
+  });
+
+  const typeControl = register('type', {
+    required: false,
+  });
+
+  const socialsControl = register('socials', {
+    required: false,
   });
 
   return (
@@ -93,7 +117,7 @@ const UpdateOrganizationForm = () => {
       />
 
       <form
-        onSubmit={handleSubmit((value) => onSubmit(value.name))}
+        onSubmit={handleSubmit((value) => onSubmit(value))}
         className={'flex flex-col space-y-4'}
       >
         <TextField>
@@ -108,6 +132,46 @@ const UpdateOrganizationForm = () => {
             />
           </TextField.Label>
         </TextField>
+
+        <TextField>
+          <TextField.Label>
+            <Trans i18nKey={'organization:organizationEmailInputLabel'} />
+
+            <TextField.Input
+              {...emailControl}
+              data-cy={'organization-email-input'}
+              required
+              placeholder={''}
+            />
+          </TextField.Label>
+        </TextField>
+
+        <TextField>
+          <TextField.Label>
+            <Trans i18nKey={'organization:organizationTypeInputLabel'} />
+
+            <TextField.Input
+              {...typeControl}
+              data-cy={'organization-type-input'}
+              required
+              placeholder={''}
+            />
+          </TextField.Label>
+        </TextField>
+
+        <TextField>
+          <TextField.Label>
+            <Trans i18nKey={'organization:organizationSocialsInputLabel'} />
+
+            <TextField.Input
+              {...socialsControl}
+              data-cy={'organization-socials-input'}
+              required
+              placeholder={''}
+            />
+          </TextField.Label>
+        </TextField>
+
 
         <div>
           <Button
