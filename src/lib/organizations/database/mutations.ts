@@ -25,11 +25,25 @@ export async function updateOrganization(
     data: Partial<Organization>;
   },
 ) {
-  const payload: Omit<Partial<OrganizationRow>, 'id'> = {
-    name: params.data.name,
-  };
+  const payload: Omit<Partial<OrganizationRow>, 'id'> = {};
 
-  if ('logoURL' in params.data) {
+  if ('name' in params.data){
+    payload.name = params.data.name;
+  }
+
+  if ('email' in params.data){
+    payload.email = params.data.email;
+  }
+
+  if ('type' in params.data){
+    payload.type = params.data.type;
+  }
+
+  if ('socials' in params.data) {
+    payload.socials = params.data.socials;
+  }
+
+  if ('logo_url' in params.data) {
     payload.logo_url = params.data.logoURL;
   }
 
@@ -37,7 +51,7 @@ export async function updateOrganization(
     .from(ORGANIZATIONS_TABLE)
     .update(payload)
     .eq('id', params.id)
-    .select('id, name')
+    .select('id, name, type, socials, logo_url')
     .single();
 
   if (error) {

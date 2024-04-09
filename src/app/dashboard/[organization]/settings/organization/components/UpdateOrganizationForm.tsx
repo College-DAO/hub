@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import OrganizationContext from '~/lib/contexts/organization';
 import useUpdateOrganizationMutation from '~/lib/organizations/hooks/use-update-organization-mutation';
 
+import Label from '~/core/ui/Label';
 import Button from '~/core/ui/Button';
 import TextField from '~/core/ui/TextField';
 import Trans from '~/core/ui/Trans';
@@ -16,6 +17,8 @@ import ImageUploader from '~/core/ui/ImageUploader';
 
 import useSupabase from '~/core/hooks/use-supabase';
 import type Organization from '~/lib/organizations/types/organization';
+import type Socials from '~/lib/organizations/types/socials';
+import SocialsForm from './AddSocialsForm';
 
 const UpdateOrganizationForm = () => {
   const { organization, setOrganization } = useContext(OrganizationContext);
@@ -23,11 +26,19 @@ const UpdateOrganizationForm = () => {
   const { t } = useTranslation('organization');
 
   const currentOrganizationName = organization?.name ?? '';
+  const currentOrganizationEmail = organization?.email ?? '';
+  const currentOrganizationType = organization?.type ?? '';
+  const currentOrganizationSocials = organization?.socials;
   const organizationId = organization?.id as number;
+
+  const [socials, setSocials] = useState<Socials[]>([]); // State to hold socials
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       name: currentOrganizationName,
+      email: currentOrganizationEmail,
+      type: currentOrganizationType,
+      socials: currentOrganizationSocials,
     },
   });
 
@@ -50,7 +61,7 @@ const UpdateOrganizationForm = () => {
   );
 
   const onSubmit = useCallback(
-    async (organizationName: string) => {
+    async (organizationInput: Partial<Organization>) => {
       const organizationId = organization?.id;
 
       if (!organizationId) {
@@ -61,7 +72,10 @@ const UpdateOrganizationForm = () => {
 
       const organizationData: WithId<Partial<Organization>> = {
         id: organizationId,
-        name: organizationName,
+        name: organizationInput.name,
+        email: organizationInput.email,
+        type: organizationInput.type,
+        socials: socials,
       };
 
       return updateOrganizationData(organizationData);
@@ -72,11 +86,18 @@ const UpdateOrganizationForm = () => {
   useEffect(() => {
     reset({
       name: organization?.name,
+      email: organization?.email,
+      type: organization?.type,
+      socials: organization?.socials,
     });
   }, [organization, reset]);
 
   const nameControl = register('name', {
     required: true,
+  });
+
+  const emailControl = register('email', {
+    required: false,
   });
 
   return (
@@ -93,7 +114,7 @@ const UpdateOrganizationForm = () => {
       />
 
       <form
-        onSubmit={handleSubmit((value) => onSubmit(value.name))}
+        onSubmit={handleSubmit((value) => onSubmit(value))}
         className={'flex flex-col space-y-4'}
       >
         <TextField>
@@ -108,6 +129,39 @@ const UpdateOrganizationForm = () => {
             />
           </TextField.Label>
         </TextField>
+
+        <TextField>
+          <TextField.Label>
+            <Trans i18nKey={'organization:organizationEmailInputLabel'} />
+
+            <TextField.Input
+              {...emailControl}
+              data-cy={'organization-email-input'}
+              required
+              placeholder={''}
+            />
+          </TextField.Label>
+        </TextField>
+        {/* TODO: Bro this form is not secure lol I need to fix this later with enums etc. */}
+        <div>
+          <Label>
+            <Trans i18nKey={'organization:organizationTypeInputLabel'} />
+            <select
+              {...register('type', { required: true })}
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              required
+              data-cy={'organization-type-select'}
+            >
+              <option value="" disabled>
+                Select type
+              </option>
+              <option value="club">Club</option>
+              <option value="company">Company</option>
+            </select>
+          </Label>
+        </div>
+
+        <SocialsForm socials={socials} setSocials={setSocials} />
 
         <div>
           <Button
