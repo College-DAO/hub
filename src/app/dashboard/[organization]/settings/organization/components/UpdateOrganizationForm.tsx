@@ -9,6 +9,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import OrganizationContext from '~/lib/contexts/organization';
 import useUpdateOrganizationMutation from '~/lib/organizations/hooks/use-update-organization-mutation';
 
+import Label from '~/core/ui/Label';
 import Button from '~/core/ui/Button';
 import TextField from '~/core/ui/TextField';
 import Trans from '~/core/ui/Trans';
@@ -99,14 +100,6 @@ const UpdateOrganizationForm = () => {
     required: false,
   });
 
-  const typeControl = register('type', {
-    required: false,
-  });
-
-  const socialsControl = register('socials', {
-    required: false,
-  });
-
   return (
     <div className={'space-y-8'}>
       <UploadLogoForm
@@ -149,19 +142,24 @@ const UpdateOrganizationForm = () => {
             />
           </TextField.Label>
         </TextField>
-
-        <TextField>
-          <TextField.Label>
+        {/* TODO: Bro this form is not secure lol I need to fix this later with enums etc. */}
+        <div>
+          <Label>
             <Trans i18nKey={'organization:organizationTypeInputLabel'} />
-
-            <TextField.Input
-              {...typeControl}
-              data-cy={'organization-type-input'}
+            <select
+              {...register('type', { required: true })}
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
               required
-              placeholder={''}
-            />
-          </TextField.Label>
-        </TextField>
+              data-cy={'organization-type-select'}
+            >
+              <option value="" disabled>
+                Select type
+              </option>
+              <option value="club">Club</option>
+              <option value="company">Company</option>
+            </select>
+          </Label>
+        </div>
 
         <SocialsForm socials={socials} setSocials={setSocials} />
 
