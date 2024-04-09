@@ -43,7 +43,7 @@ export async function updateOrganization(
     payload.socials = params.data.socials;
   }
 
-  if ('logoURL' in params.data) {
+  if ('logo_url' in params.data) {
     payload.logo_url = params.data.logoURL;
   }
 
@@ -51,7 +51,7 @@ export async function updateOrganization(
     .from(ORGANIZATIONS_TABLE)
     .update(payload)
     .eq('id', params.id)
-    .select('id, name')
+    .select('id, name, type, socials, logo_url')
     .single();
 
   if (error) {

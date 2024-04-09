@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -16,6 +16,8 @@ import ImageUploader from '~/core/ui/ImageUploader';
 
 import useSupabase from '~/core/hooks/use-supabase';
 import type Organization from '~/lib/organizations/types/organization';
+import type Socials from '~/lib/organizations/types/socials';
+import SocialsForm from './AddSocialsForm';
 
 const UpdateOrganizationForm = () => {
   const { organization, setOrganization } = useContext(OrganizationContext);
@@ -27,6 +29,8 @@ const UpdateOrganizationForm = () => {
   const currentOrganizationType = organization?.type ?? '';
   const currentOrganizationSocials = organization?.socials;
   const organizationId = organization?.id as number;
+
+  const [socials, setSocials] = useState<Socials[]>([]); // State to hold socials
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -70,7 +74,7 @@ const UpdateOrganizationForm = () => {
         name: organizationInput.name,
         email: organizationInput.email,
         type: organizationInput.type,
-        socials: organizationInput.socials,
+        socials: socials,
       };
 
       return updateOrganizationData(organizationData);
@@ -159,19 +163,7 @@ const UpdateOrganizationForm = () => {
           </TextField.Label>
         </TextField>
 
-        <TextField>
-          <TextField.Label>
-            <Trans i18nKey={'organization:organizationSocialsInputLabel'} />
-
-            <TextField.Input
-              {...socialsControl}
-              data-cy={'organization-socials-input'}
-              required
-              placeholder={''}
-            />
-          </TextField.Label>
-        </TextField>
-
+        <SocialsForm socials={socials} setSocials={setSocials} />
 
         <div>
           <Button
