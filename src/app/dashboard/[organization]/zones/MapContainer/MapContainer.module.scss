@@ -57,3 +57,11 @@
     }
   }
 }
+.sidebarAnimationContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 300px; // Adjust the width as needed
+  z-index: 150; // Ensure it's above other elements
+}

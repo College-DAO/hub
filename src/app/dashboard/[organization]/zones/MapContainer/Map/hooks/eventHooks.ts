@@ -12,12 +12,10 @@ export const useClearSelectedNode = () => {
   const { zone: selectedZoneKey = undefined } = useParams<string>();
 
   const [selectedZone, setSelectedZone] = useState<MapNode | null>(null);
-  console.log("clears")
   const onZoneClick = useCallback(
     (node: NodeObject) => {
       const zone = node as MapNode;
       setSelectedZone(zone);
-      console.log("fortnite")
     },
     []
   );

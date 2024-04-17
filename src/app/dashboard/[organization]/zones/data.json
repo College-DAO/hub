@@ -16,7 +16,7 @@
                 }
             ],
             "zone": "osmosis-1",
-            "logoUrl": "https://storage.mapofzones.com/frontend/labels/Osmosis40.svg",
+            "logoUrl": "/public/assets/clubs+companies/blockchain@ucla.svg",
             "name": "Osmosis",
             "ibcVolume": 27355274,
             "ibcVolumeIn": 13117303,

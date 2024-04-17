@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense, useCallback, useRef, useState } from 'react';
-
 import cn from 'classnames';
 import { motion } from 'framer-motion';
 import { Sidebar } from '../Sidebar/Sidebar';
@@ -21,6 +20,7 @@ import { nodes, links } from '../mock_data';
 import nodeData from '../data.json'
 import {MapNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/Types';
 import { NodeObject } from 'react-force-graph-2d';
+import { AnimatePresence } from 'framer-motion';
 
 export default function MapContainer({ className }: MapContainerProps) {
   
@@ -28,13 +28,20 @@ export default function MapContainer({ className }: MapContainerProps) {
   const decreaseZoom = useRef<() => void | null>(null);
   const [isZoomInDisabled, setIsZoomInDisabled] = useState(false);
   const [isZoomOutDisabled, setIsZoomOutDisabled] = useState(false);  
-  
+  const [currentZone, setSelectedZone] = useState<MapNode | null>(null);
   const [selectedZoneKey, onZoneClick, selectedZone, clearSelectedZone] = useSelectedZone();
-
+  const sidebarVariants = {
+    hidden: { x: '100%', opacity: 0 },
+    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+  };
+  const handleCloseSidebar = useCallback(() => {
+    clearSelectedZone();
+    console.log('Closing sidebar');
+    // This function will be passed to Sidebar to close it
+  }, [clearSelectedZone]);
   const handleZoneClick = useCallback((node: NodeObject) => {
     const zone = node as MapNode;
     onZoneClick(node);
-    console.log("click");
   }, [onZoneClick]);
 
   const onZoomIn = useCallback(() => {
@@ -63,9 +70,21 @@ export default function MapContainer({ className }: MapContainerProps) {
             disableZoomOut={(value: boolean) => setIsZoomOutDisabled(value)}
             onZoneClick={handleZoneClick}
           />
-          {selectedZone && <Sidebar selectedZone={selectedZone} />}
-        </Suspense>
-      </ErrorBoundary>
-    </div>
+          <AnimatePresence>
+          {selectedZone && (
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={sidebarVariants}
+              className={styles.sidebarAnimationContainer}
+            >
+              <Sidebar selectedZone={selectedZone} onClose={handleCloseSidebar} />
+             </motion.div>
+            )}
+          </AnimatePresence>
+      </Suspense>
+    </ErrorBoundary>
+  </div>
   );
 }

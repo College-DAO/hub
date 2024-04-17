@@ -12,11 +12,14 @@ import { ScrollableContainer } from '../components/ui/ScrollableContainer/Scroll
 import { NumberType } from '../components/ui/NumberFormat';
 import { ZoneOverviewItem } from './ZoneOverviewItem/ZoneOverviewItem';
 import {MapNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/Types';
+import classNames from 'classnames';
+import { motion } from 'framer-motion';
 
 interface SidebarProps {
   selectedZone: MapNode | null;
+  onClose: () => void;
 }
-function Sidebar({ selectedZone }: SidebarProps) {
+function Sidebar({ selectedZone, onClose }: SidebarProps) {
   const data = selectedZone
     ? {
         website: selectedZone.website,
@@ -31,7 +34,20 @@ function Sidebar({ selectedZone }: SidebarProps) {
         name: '',
       };
   return (
-    <Card className={contentStyle.container}>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      variants={{
+        hidden: { x: '100%', opacity: 0 },
+        visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 30 } }
+      }}
+      className={`${contentStyle.container} ${classNames}`}
+    >
+      <button onClick={onClose} style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', fontSize: '24px' , zIndex: '1000'}}>
+        &times;
+      </button>
+    <Card className={`${contentStyle.container} ${classNames}`}>
         <div className={contentStyle.detailsTitle}>
           <ZoneLogo
             logoUrl={data.logoUrl}
@@ -119,6 +135,7 @@ function Sidebar({ selectedZone }: SidebarProps) {
           ></ZoneOverviewItem>
         </div>
       </Card>
+      </motion.div>
   );
 }
 
