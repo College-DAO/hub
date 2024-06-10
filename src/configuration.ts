@@ -37,9 +37,9 @@ const configuration = {
   },
   production,
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
-  theme: Themes.Light,
+  theme: Themes.Dark,
   features: {
-    enableThemeSwitcher: true,
+    enableThemeSwitcher: false,
     enableAccountDeletion: getBoolean(
       process.env.NEXT_PUBLIC_ENABLE_ACCOUNT_DELETION,
       false,

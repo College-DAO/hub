@@ -1,5 +1,6 @@
 import LogoImage from '~/core/ui/Logo/LogoImage';
 
+
 async function OnboardingLayout({ children }: React.PropsWithChildren) {
   return (
     <div className={'flex flex-1 flex-col dark:bg-background py-8 h-screen'}>

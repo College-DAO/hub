@@ -61,7 +61,7 @@ export const Post = defineDocumentType(() => ({
         url: [siteUrl, 'blog', doc._raw.flattenedPath].join('/'),
         author: {
           '@type': 'Organization',
-          name: `Makerkit`,
+          name: `CollegeDAO`,
         },
       }),
     },
