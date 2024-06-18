@@ -1,5 +1,4 @@
 import useSupabase from "~/core/hooks/use-supabase";
-import useSWR from "swr";
 import { SupabaseClient } from '@supabase/supabase-js';
 
 interface Partnership {
@@ -9,23 +8,27 @@ interface Partnership {
   details: string;
 }
 
-export function useFetchSentPartnerships(sender_id: number) {
+export function useReceivePartnership() {
     const client: SupabaseClient = useSupabase();
-    const key = sender_id ? ['partnerships', sender_id] : null;
 
-    //want a function that returns a promise with an array of Partnership objects
-    const fetcher = async (): Promise<Partnership[]> => {
+    async function receivePartnership(partnershipId: number): Promise<Partnership | null> {
         const { data, error } = await client
             .from('partnerships')
             .select('*')
-            .eq('sender_id', sender_id);
+            .eq('id', partnershipId)
+            //only want a single row
+            .single(); 
 
         if (error) {
             throw error;
         }
 
-        return data as Partnership[];
-    };
+        if (!data) {
+            return null; 
+        }
 
-    return useSWR<Partnership[]>(key, fetcher);
+        return data as Partnership;
+    }
+
+    return receivePartnership;
 }
