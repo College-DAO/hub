@@ -158,10 +158,6 @@ const CreatePartnershipModalToggle: React.FC = () => {
     }
   };
 
-  const handleSendPartnership = () => {
-    window.location.href = 'http://localhost:3000/dashboard/a0ef5214-7bd8-43ad-8928-a75c7d0be061/partnerships';
-  };
-
   return (
     <>
       <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
@@ -282,11 +278,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                  <form>
-                    <Button type="submit" onClick={handleSendPartnership}>
-                      <Trans i18nKey={'Send Partnership'} />
-                    </Button>
-                  </form>                
+                  <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
                 </CardFooter>
               </Card>
             </TabsContent>
