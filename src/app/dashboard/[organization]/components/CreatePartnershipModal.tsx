@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from '~/core/ui/Select';
 import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
+
 // Initialize Supabase client
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
@@ -145,11 +146,19 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('Form submitted'); // Log to check if submit is triggered
+    console.log('Form data before submit:', formData); // Log form data
+
     try {
-      const { error } = await supabase
-        .from('partnerships')
-        .insert([formData]);
-      if (error) throw error;
+      const response = await fetch('/api/partnerships/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(formData)
+      if (!response.ok) throw new Error('Failed to create partnership');
       setIsOpen(false); // Close modal on success
       console.log('Partnership created successfully');
     } catch (error: any) {
