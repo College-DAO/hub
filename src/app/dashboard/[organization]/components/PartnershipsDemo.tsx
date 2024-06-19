@@ -116,8 +116,10 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const organzation = useCurrentOrganization();
-  const org_id = organzation?.id;
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editedPartnership, setEditedPartnership] = useState<Partnership | null>(null);
+  const organization = useCurrentOrganization();
+  const org_id = organization?.id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,7 +147,49 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
     };
 
     fetchData();
-  }, [type]);  // Re-fetch the data when the "type" prop changes
+  }, [type, org_id]);  // Re-fetch the data when the "type" prop changes
+
+  const handleEdit = (partnership: Partnership) => {
+    setEditId(partnership.id);
+    setEditedPartnership({ ...partnership });
+  };
+
+  const handleSave = async () => {
+    if (editedPartnership) {
+      try {
+        const response = await fetch(`/api/partnerships/${editedPartnership.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editedPartnership),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const updatedPartnership = await response.json();
+        setPartnerships((prev) =>
+          prev.map((p) => (p.id === updatedPartnership.id ? updatedPartnership : p))
+        );
+        setEditId(null);
+        setEditedPartnership(null);
+      } catch (error) {
+        console.error('Error updating partnership:', error);
+        setError('Failed to update data');
+      }
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (editedPartnership) {
+      setEditedPartnership({
+        ...editedPartnership,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -160,20 +204,91 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
           <TableHead>Funding</TableHead>
           <TableHead>Duration</TableHead>
           <TableHead>Status</TableHead>
+          {type === 'sent' && <TableHead>Actions</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
         {partnerships.map((partnership) => (
           <TableRow key={partnership.id}>
-            <TableCell>{partnership.sender_name}</TableCell>
-            <TableCell>{partnership.partner_name}</TableCell>
-            <TableCell>{partnership.details}</TableCell>
-            <TableCell>{`$${partnership.funding}`}</TableCell>
-            <TableCell>{partnership.duration}</TableCell>
-            {/* Example for adding a status badge similar to the CustomersTable. Adjust as needed. */}
-              <TableCell>
+            <TableCell>
+              {editId === partnership.id ? (
+                <input
+                  type="text"
+                  name="sender_name"
+                  value={editedPartnership?.sender_name}
+                  onChange={handleChange}
+                  className="bg-black"
+                />
+              ) : (
+                partnership.sender_name
+              )}
+            </TableCell>
+            <TableCell>
+              {editId === partnership.id ? (
+                <input
+                  type="text"
+                  name="partner_name"
+                  value={editedPartnership?.partner_name}
+                  onChange={handleChange}
+                  className="bg-black"
+                />
+              ) : (
+                partnership.partner_name
+              )}
+            </TableCell>
+            <TableCell>
+              {editId === partnership.id ? (
+                <textarea
+                  name="details"
+                  value={editedPartnership?.details}
+                  onChange={handleChange}
+                  className="bg-black"
+                />
+              ) : (
+                partnership.details
+              )}
+            </TableCell>
+            <TableCell>
+              {editId === partnership.id ? (
+                <input
+                  type="text"
+                  name="funding"
+                  value={editedPartnership?.funding}
+                  onChange={handleChange}
+                  className="bg-black"
+                />
+              ) : (
+                `$${partnership.funding}`
+              )}
+            </TableCell>
+            <TableCell>
+              {editId === partnership.id ? (
+                <input
+                  type="text"
+                  name="duration"
+                  value={editedPartnership?.duration}
+                  onChange={handleChange}
+                  className="bg-black"
+                />
+              ) : (
+                partnership.duration
+              )}
+            </TableCell>
+            <TableCell>
               <Tile.Badge trend={partnership.status}>Active</Tile.Badge>
-            </TableCell> 
+            </TableCell>
+            {type === 'sent' && (
+              <TableCell>
+                {editId === partnership.id ? (
+                  <>
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={() => setEditId(null)}>Cancel</button>
+                  </>
+                ) : (
+                  <button onClick={() => handleEdit(partnership)}>Edit</button>
+                )}
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

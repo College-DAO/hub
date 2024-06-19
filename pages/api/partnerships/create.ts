@@ -10,14 +10,15 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { partnerName, partnershipType, duration, fundingAmount, sender_id, kpis, sender_name, receiver_id} = req.body;
+    const { partnerName, partnershipType, duration, fundingAmount, 
+      der_id, kpis, sender_name, receiver_id} = req.body;
     const partnerships = [
       {
         partner_name: partnerName,
         type: 'sent', 
         duration: duration,
         funding: fundingAmount,
-        sender_id: sender_id,
+        sender_id: der_id,
         kpis: kpis,
         sender_name: sender_name,
         receiver_id: receiver_id,
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           type: 'received',
           duration: duration,
           funding: fundingAmount,
-          sender_id: sender_id, 
+          sender_id: der_id, 
           kpis: kpis,
           sender_name:sender_name,
           receiver_id: receiver_id
