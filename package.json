@@ -62,6 +62,7 @@
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "2.39.7",
     "@tanstack/react-table": "^8.13.2",
+    "@types/express": "^4.17.21",
     "classnames": "^2.5.1",
     "clsx": "^2.1.0",
     "contentlayer": "0.3.4",
@@ -125,7 +126,7 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "supabase": "^1.148.6",
     "tailwindcss": "^3.4.1",
-    "typescript": "5.4.2"
+    "typescript": "^5.4.2"
   },
   "engines": {
     "node": ">=18.17.0"
