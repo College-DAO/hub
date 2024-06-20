@@ -155,33 +155,33 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
     setEditedPartnership({ ...partnership });
   };
 
-  const handleSave = async () => {
-    if (editedPartnership) {
-      try {
-        const response = await fetch(`/api/partnerships/${editedPartnership.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(editedPartnership),
-        });
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const updatedPartnership = await response.json();
-        setPartnerships((prev) =>
-          prev.map((p) => (p.id === updatedPartnership.id ? updatedPartnership : p))
-        );
-        setEditId(null);
-        setEditedPartnership(null);
-      } catch (error) {
-        console.error('Error updating partnership:', error);
-        setError('Failed to update data');
+  const handleUpdate = async () => {
+    console.log('Form submitted'); // Log to check if submit is triggered
+  
+    try {
+      const response = await fetch('/api/partnerships/update', { // Ensure the ID is passed correctly
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedPartnership),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update partnership');
       }
+  
+      const data = await response.json();
+      console.log('Partnership updated successfully:', data); // Log the response data
+    } catch (error: any) {
+      console.error('Error updating partnership:', error.message);
+      setError(error.message);
     }
   };
+  
+
+   
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (editedPartnership) {
@@ -282,7 +282,7 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
               <TableCell>
                 {editId === partnership.id ? (
                   <>
-                    <button onClick={handleSave}>Save</button>
+                    <button onClick={handleUpdate}>Save</button>
                     <button onClick={() => setEditId(null)}>Cancel</button>
                   </>
                 ) : (

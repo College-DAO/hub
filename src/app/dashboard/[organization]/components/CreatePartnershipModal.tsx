@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Button from '~/core/ui/Button';
 import TextField from '~/core/ui/TextField';
+import { createClient } from '@supabase/supabase-js';
 import Trans from '~/core/ui/Trans';
+import Alert from '~/core/ui/Alert';
 import KPIForm from './KPIForm';
 import { Kpi } from './KPIForm';
-import { useSendPartnership } from '~/lib/partnerships/hooks/send-partnership';
 import {
   Card,
   CardContent,
@@ -29,27 +30,14 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '~/core/ui/Select';
 import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
 
-interface Partnership {
-  id: number;
-  sender_id: number;
-  sender_name: string;
-  receiver_id: number;
-  recepient_name: string;
-  partnerName: string;
-  partnershipName: string;
-  partnershipType: string;
-  partnershipFormat: string;
-  durationStart: string;
-  durationEnd: string;
-  fundingAmount: number;
-  details: string;
-  kpis: Kpi[];
-}
+// Initialize Supabase client
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 const CreatePartnershipModalToggle: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -71,7 +59,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
     partnerName: '',
     partnershipName: '',
     partnershipType: 'sent',
-    partnershipFormat: 'In-person event',
+    partnershipFormat: 'In-person event', // Default to first option
     durationStart: '',
     durationEnd: '',
     fundingAmount: 0,
@@ -83,9 +71,6 @@ const CreatePartnershipModalToggle: React.FC = () => {
     kpis: [],
   });
   const [error, setError] = useState<string | null>(null);
-  const [sentPartnership, setSentPartnership] = useState<Partnership | null>(null);
-
-  const sendPartnership = useSendPartnership();
 
   const organization = useCurrentOrganization();
   const org_id = organization?.id;
@@ -161,66 +146,29 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      if (
-        formData.sender_id === undefined ||
-        formData.receiver_id === undefined ||
-        formData.fundingAmount === undefined
-      ) {
-        throw new Error('Sender ID, Receiver ID, and Funding Amount must be defined.');
-      }
-  
-      const data = await sendPartnership({
-        sender_id: formData.sender_id,
-        sender_name: formData.sender_name!,
-        receiver_id: formData.receiver_id,
-        recepient_name: formData.recepient_name!,
-        partnerName: formData.partnerName,
-        partnershipName: formData.partnershipName,
-        partnershipType: formData.partnershipType,
-        partnershipFormat: formData.partnershipFormat,
-        durationStart: formData.durationStart,
-        durationEnd: formData.durationEnd,
-        fundingAmount: formData.fundingAmount,
-        details: formData.details,
-        kpis: formData.kpis
-      });
+    console.log('Form submitted'); // Log to check if submit is triggered
+    console.log('Form data before submit:', formData); // Log form data
 
-  
-      setIsOpen(false);
+    try {
+      const response = await fetch('/api/partnerships/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(formData)
+      if (!response.ok) throw new Error('Failed to create partnership');
+      setIsOpen(false); // Close modal on success
       console.log('Partnership created successfully');
-  
-      const newPartnership: Partnership = {
-        id: data[0].id,
-        sender_id: formData.sender_id,
-        sender_name: formData.sender_name!,
-        receiver_id: formData.receiver_id,
-        recepient_name: formData.recepient_name!,
-        partnerName: formData.partnerName,
-        partnershipName: formData.partnershipName,
-        partnershipType: formData.partnershipType,
-        partnershipFormat: formData.partnershipFormat,
-        durationStart: formData.durationStart,
-        durationEnd: formData.durationEnd,
-        fundingAmount: formData.fundingAmount,
-        details: formData.details,
-        kpis: formData.kpis,
-      };
-  
-      setSentPartnership(newPartnership);
     } catch (error: any) {
       console.error('Error creating partnership:', error.message);
       setError(error.message);
     }
   };
-  
 
-  const handleSendPartnership = () => {
-    window.location.href = 'http://localhost:3000/dashboard/a0ef5214-7bd8-43ad-8928-a75c7d0be061/partnerships';
-  };
 
   return (
-    
     <>
       <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
         <PlusCircleIcon className={'w-4 mr-2'} />
@@ -340,11 +288,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                  <form>
-                    <Button type="submit" onClick={handleSendPartnership}>
-                      <Trans i18nKey={'Send Partnership'} />
-                    </Button>
-                  </form>                
+                  <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
                 </CardFooter>
               </Card>
             </TabsContent>
