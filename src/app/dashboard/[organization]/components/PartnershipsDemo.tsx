@@ -43,7 +43,7 @@ export default function PartnershipsDemo() {
     <div className={'flex flex-col space-y-6 pb-36'}>
       <div>
         <Tile>
-          <Tile.Heading>Sent Requests</Tile.Heading>
+          <Tile.Heading>Sent Requests </Tile.Heading>
           <Tile.Body>
             <PartnershipsTable type="sent"  />
           </Tile.Body>
