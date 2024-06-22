@@ -152,7 +152,7 @@ function PartnershipsTable({ type, handleEdit }: PartnershipsTableProps & { hand
           <TableRow key={partnership.id}>
             <TableCell>{partnership.sender_name}</TableCell>
             <TableCell>{partnership.partner_name}</TableCell>
-            <TableCell>{partnership.partnershipName}</TableCell>
+            <TableCell>{partnership.partnership_name}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.durationEnd}</TableCell>
             <TableCell>
@@ -182,17 +182,16 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
 }) => {
   const [formData, setFormData] = useState({
     partnerName: partnership?.partner_name || '',
-    partnershipName: partnership?.name || '',
+    partnershipName: partnership?.partnership_name || '',
     partnershipType: partnership?.type || 'sent',
     partnershipFormat: partnership?.format || 'In-person event',
-    durationStart: partnership?.durationStart || '',
-    durationEnd: partnership?.durationEnd || '',
+    durationStart: partnership?.duration_start || '',
+    durationEnd: partnership?.duration_end || '',
     fundingAmount: partnership?.funding || 0,
     details: partnership?.details || '',
     sender_id: partnership?.sender_id || undefined,
     sender_name: partnership?.sender_name || undefined,
     receiver_id: partnership?.receiver_id || undefined,
-    recepient_name: partnership?.recepient_name || undefined,
     kpis: partnership?.kpis || [],
   });
 
