@@ -154,7 +154,7 @@ function PartnershipsTable({ type, handleEdit }: PartnershipsTableProps & { hand
             <TableCell>{partnership.partner_name}</TableCell>
             <TableCell>{partnership.partnership_name}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
-            <TableCell>{partnership.durationEnd}</TableCell>
+            <TableCell>{partnership.duration_end}</TableCell>
             <TableCell>
               <Tile.Badge trend={partnership.status}>Active</Tile.Badge>
             </TableCell> 
@@ -212,7 +212,7 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
         method: 'PUT',
@@ -221,10 +221,13 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) throw new Error('Failed to update partnership');
+  
+      // Ensure modal closes and page refreshes after the update
       setIsOpen(false);
       console.log('Partnership updated successfully');
+      window.location.reload();
     } catch (error: any) {
       console.error('Error updating partnership:', error.message);
     }
@@ -339,7 +342,7 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center">
-                <Button type="submit">Save Changes</Button>
+                <Button onClick={() => setIsOpen(false)} type="submit">Save Changes</Button>
               </CardFooter>
             </Card>
           </TabsContent>
