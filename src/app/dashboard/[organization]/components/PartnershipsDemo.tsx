@@ -174,7 +174,6 @@ function PartnershipsTable({ type, handleEdit }: PartnershipsTableProps & { hand
     </Table>
   );
 }
-
 const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
   partnership,
   isOpen,
@@ -194,6 +193,26 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
     receiver_id: partnership?.receiver_id || undefined,
     kpis: partnership?.kpis || [],
   });
+
+  // Added useEffect to update form data when partnership changes
+  useEffect(() => {
+    if (partnership) {
+      setFormData({
+        partnerName: partnership.partner_name,
+        partnershipName: partnership.partnership_name,
+        partnershipType: partnership.type,
+        partnershipFormat: partnership.format,
+        durationStart: partnership.duration_start,
+        durationEnd: partnership.duration_end,
+        fundingAmount: partnership.funding,
+        details: partnership.details,
+        sender_id: partnership.sender_id,
+        sender_name: partnership.sender_name,
+        receiver_id: partnership.receiver_id,
+        kpis: partnership.kpis,
+      });
+    }
+  }, [partnership]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
