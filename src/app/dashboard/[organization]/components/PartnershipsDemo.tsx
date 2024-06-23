@@ -12,8 +12,9 @@ import { getPartnerships } from '~/lib/partnerships/queries'
 import Partnership from '~/lib/partnerships/partnership';
 import useSWR from 'swr';
 import useSupabase from '~/core/hooks/use-supabase';
+import KPIForm, { Kpi } from './KPIForm';
 import useCurrentOrganization from "~/lib/organizations/hooks/use-current-organization";
-
+import Button from '~/core/ui/Button';
 import {
   Table,
   TableBody,
@@ -22,22 +23,49 @@ import {
   TableHeader,
   TableRow,
 } from '~/core/ui/Table';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/core/ui/card';
+import Label from '~/core/ui/Label';
+import Modal from '~/core/ui/Modal';
+import TextField from '~/core/ui/TextField';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '~/core/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/core/ui/Select';
 
 interface PartnershipsTableProps {
   type: 'sent' | 'received';
 }
+interface EditPartnershipModalProps {
+  partnership: Partnership | null;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
 export default function PartnershipsDemo() {
-  const mrr = useMemo(() => generateDemoData(), []);
-  const visitors = useMemo(() => generateDemoData(), []);
-  const returningVisitors = useMemo(() => generateDemoData(), []);
-  const churn = useMemo(() => generateDemoData(), []);
-  const netRevenue = useMemo(() => generateDemoData(), []);
-  const fees = useMemo(() => generateDemoData(), []);
-  const newCustomers = useMemo(() => generateDemoData(), []);
-  const tickets = useMemo(() => generateDemoData(), []);
-  const activeUsers = useMemo(() => generateDemoData(), []);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false); // State to manage the modal
+  const [editPartnership, setEditPartnership] = useState<Partnership | null>(null);
 
+  const handleEdit = (partnership: Partnership) => {
+    setEditPartnership(partnership);
+    setIsEditModalOpen(true); // Open the modal
+  };
 
   return (
     <div className={'flex flex-col space-y-6 pb-36'}>
@@ -45,7 +73,7 @@ export default function PartnershipsDemo() {
         <Tile>
           <Tile.Heading>Sent Requests</Tile.Heading>
           <Tile.Body>
-            <PartnershipsTable type="sent"  />
+            <PartnershipsTable type="sent" handleEdit={handleEdit} />
           </Tile.Body>
         </Tile>
       </div>
@@ -53,71 +81,30 @@ export default function PartnershipsDemo() {
         <Tile>
           <Tile.Heading>Received Requests</Tile.Heading>
           <Tile.Body>
-            <PartnershipsTable type="received" />
+            <PartnershipsTable type="received" handleEdit={handleEdit} />
           </Tile.Body>
         </Tile>
       </div>
+      {editPartnership && (
+        <EditPartnershipModal
+          partnership={editPartnership}
+          isOpen={isEditModalOpen}
+          setIsOpen={setIsEditModalOpen}
+        />
+      )}
     </div>
   );
 }
 
-function generateDemoData() {
-  const today = new Date();
-  const formatter = new Intl.DateTimeFormat('en-us', {
-    month: 'long',
-    year: '2-digit',
-  });
-
-  const data: { value: string; name: string }[] = [];
-
-  for (let n = 8; n > 0; n -= 1) {
-    const date = new Date(today.getFullYear(), today.getMonth() - n, 1);
-
-    data.push({
-      name: formatter.format(date) as string,
-      value: (Math.random() * 10).toFixed(1),
-    });
-  }
-
-  return [data, data[data.length - 1].value] as [typeof data, string];
-}
-
-function Chart(
-  props: React.PropsWithChildren<{ data: { value: string; name: string }[] }>,
-) {
-  return (
-    <div className={'h-36'}>
-      <ResponsiveContainer width={'100%'} height={'100%'}>
-        <LineChart width={400} height={100} data={props.data}>
-          <Line
-            className={'text-primary'}
-            type="monotone"
-            dataKey="value"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            dot={false}
-          />
-
-          <XAxis
-            style={{ fontSize: 9 }}
-            axisLine={false}
-            tickSize={0}
-            dataKey="name"
-            height={15}
-            dy={10}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
-function PartnershipsTable({ type }: PartnershipsTableProps) {
+function PartnershipsTable({ type, handleEdit }: PartnershipsTableProps & { handleEdit: (partnership: Partnership) => void }) {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+<<<<<<< HEAD
   const [editId, setEditId] = useState<string | null>(null);
   const [editedPartnership, setEditedPartnership] = useState<Partnership | null>(null);
+=======
+>>>>>>> ff215a829d74b2c49abc7ab827a0ff76de13fefc
   const organization = useCurrentOrganization();
   const org_id = organization?.id;
 
@@ -147,6 +134,7 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
     };
 
     fetchData();
+<<<<<<< HEAD
   }, [type, org_id]);  // Re-fetch the data when the "type" prop changes
 
   const handleEdit = (partnership: Partnership) => {
@@ -190,6 +178,9 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
       });
     }
   };
+=======
+  }, [type, org_id]);  // Re-fetch the data when the "type" or "org_id" prop changes
+>>>>>>> ff215a829d74b2c49abc7ab827a0ff76de13fefc
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -202,14 +193,19 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
           <TableHead>Receiver</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Funding</TableHead>
-          <TableHead>Duration</TableHead>
+          <TableHead>End Date</TableHead>
           <TableHead>Status</TableHead>
+<<<<<<< HEAD
           {type === 'sent' && <TableHead>Actions</TableHead>}
+=======
+          <TableHead>Actions</TableHead>
+>>>>>>> ff215a829d74b2c49abc7ab827a0ff76de13fefc
         </TableRow>
       </TableHeader>
       <TableBody>
         {partnerships.map((partnership) => (
           <TableRow key={partnership.id}>
+<<<<<<< HEAD
             <TableCell>
               {editId === partnership.id ? (
                 <input
@@ -287,6 +283,24 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
                 ) : (
                   <button onClick={() => handleEdit(partnership)}>Edit</button>
                 )}
+=======
+            <TableCell>{partnership.sender_name}</TableCell>
+            <TableCell>{partnership.partner_name}</TableCell>
+            <TableCell>{partnership.partnership_name}</TableCell>
+            <TableCell>{`$${partnership.funding}`}</TableCell>
+            <TableCell>{partnership.duration_end}</TableCell>
+            <TableCell>
+              <Tile.Badge trend={partnership.status}>Active</Tile.Badge>
+            </TableCell> 
+            {type === 'sent' && (
+              <TableCell>
+                <Button onClick={() => handleEdit(partnership)}>Edit</Button>
+              </TableCell>
+            )}
+            {type === 'received' && (
+              <TableCell>
+                <Button onClick={() => handleView(partnership)}>View</Button>
+>>>>>>> ff215a829d74b2c49abc7ab827a0ff76de13fefc
               </TableCell>
             )}
           </TableRow>
@@ -295,3 +309,199 @@ function PartnershipsTable({ type }: PartnershipsTableProps) {
     </Table>
   );
 }
+const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
+  partnership,
+  isOpen,
+  setIsOpen,
+}) => {
+  const [formData, setFormData] = useState({
+    partnerName: partnership?.partner_name || '',
+    partnershipName: partnership?.partnership_name || '',
+    partnershipType: partnership?.type || 'sent',
+    partnershipFormat: partnership?.format || 'In-person event',
+    durationStart: partnership?.duration_start || '',
+    durationEnd: partnership?.duration_end || '',
+    fundingAmount: partnership?.funding || 0,
+    details: partnership?.details || '',
+    sender_id: partnership?.sender_id || undefined,
+    sender_name: partnership?.sender_name || undefined,
+    receiver_id: partnership?.receiver_id || undefined,
+    kpis: partnership?.kpis || [],
+  });
+
+  // Added useEffect to update form data when partnership changes
+  useEffect(() => {
+    if (partnership) {
+      setFormData({
+        partnerName: partnership.partner_name,
+        partnershipName: partnership.partnership_name,
+        partnershipType: partnership.type,
+        partnershipFormat: partnership.format,
+        durationStart: partnership.duration_start,
+        durationEnd: partnership.duration_end,
+        fundingAmount: partnership.funding,
+        details: partnership.details,
+        sender_id: partnership.sender_id,
+        sender_name: partnership.sender_name,
+        receiver_id: partnership.receiver_id,
+        kpis: partnership.kpis,
+      });
+    }
+  }, [partnership]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData({
+      ...formData,
+      partnershipFormat: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    try {
+      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) throw new Error('Failed to update partnership');
+  
+      // Ensure modal closes and page refreshes after the update
+      setIsOpen(false);
+      console.log('Partnership updated successfully');
+      window.location.reload();
+    } catch (error: any) {
+      console.error('Error updating partnership:', error.message);
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="Edit Partnership">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Tabs defaultValue="Recipient" className="w-full max-w-xl">
+          <TabsList className="grid grid-cols-3 gap-5">
+            <TabsTrigger value="Recipient">Recipient</TabsTrigger>
+            <TabsTrigger value="Details">Details</TabsTrigger>
+            <TabsTrigger value="KPI">KPI's</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="Recipient">
+            <Card>
+              <CardHeader>
+                <CardTitle>Edit Partnership</CardTitle>
+                <CardDescription>
+                  Edit the details of the partnership.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipName">Partnership Name</Label>
+                  <TextField.Input
+                    id="partnershipName"
+                    name="partnershipName"
+                    value={formData.partnershipName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="Details">
+            <Card>
+              <CardHeader>
+                <CardTitle>Partnership Detail</CardTitle>
+                <CardDescription>
+                  Provide a brief description of your partnership
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipFormat">Partnership Format</Label>
+                  <Select onValueChange={handleSelectChange} value={formData.partnershipFormat}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a format" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="In-person event">In-person event</SelectItem>
+                        <SelectItem value="Online event">Online event</SelectItem>
+                        <SelectItem value="Research">Research</SelectItem>
+                        <SelectItem value="Consulting project">Consulting project</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationStart">Start Date</Label>
+                  <TextField.Input
+                    id="durationStart"
+                    name="durationStart"
+                    value={formData.durationStart}
+                    onChange={handleInputChange}
+                    type="date"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationEnd">End Date</Label>
+                  <TextField.Input
+                    id="durationEnd"
+                    name="durationEnd"
+                    value={formData.durationEnd}
+                    onChange={handleInputChange}
+                    type="date"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="fundingAmount">Funding</Label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">$</span>
+                    <TextField.Input
+                      id="fundingAmount"
+                      name="fundingAmount"
+                      value={formData.fundingAmount}
+                      onChange={handleInputChange}
+                      type="number"
+                      className="pl-7"
+                    />
+                  </div>
+                  <span className="text-sm text-gray-500">USD</span>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="KPI">
+            <Card>
+              <CardHeader>
+                <CardTitle>KPI's</CardTitle>
+                <CardDescription>
+                  Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({ ...formData, kpis: newKpis })} />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button onClick={() => setIsOpen(false)} type="submit">Save Changes</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </form>
+    </Modal>
+  );
+};
