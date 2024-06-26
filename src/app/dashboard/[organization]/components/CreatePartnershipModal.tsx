@@ -4,11 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import Button from '~/core/ui/Button';
 import TextField from '~/core/ui/TextField';
-import { createClient } from '@supabase/supabase-js';
 import Trans from '~/core/ui/Trans';
-import Alert from '~/core/ui/Alert';
-import KPIForm from './KPIForm';
-import { Kpi } from './KPIForm';
+import KPIForm, { Kpi } from './KPIForm';
+import { createClient } from '@supabase/supabase-js';
 import {
   Card,
   CardContent,
@@ -30,14 +28,32 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '~/core/ui/Select';
 import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
 
+<<<<<<< HEAD
 // Initialize Supabase client
+=======
+>>>>>>> main
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+
+interface Partnership {
+  id: string;
+  sender_id: number;
+  sender_name: string;
+  receiver_id: number;
+  partnerName: string;
+  partnershipName: string;
+  partnershipType: string;
+  partnershipFormat: string;
+  durationStart: string;
+  durationEnd: string;
+  fundingAmount: number;
+  details: string;
+  kpis: Kpi[];
+}
 
 const CreatePartnershipModalToggle: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -53,24 +69,24 @@ const CreatePartnershipModalToggle: React.FC = () => {
     sender_id: number | undefined;
     sender_name: string | undefined;
     receiver_id: number | undefined;
-    recepient_name: string | undefined;
     kpis: Kpi[];
   }>({
     partnerName: '',
     partnershipName: '',
     partnershipType: 'sent',
-    partnershipFormat: 'In-person event', // Default to first option
+    partnershipFormat: 'In-person event',
     durationStart: '',
     durationEnd: '',
     fundingAmount: 0,
     details: '',
-    sender_id: 1,
+    sender_id: undefined,
     sender_name: '',
-    receiver_id: 1,
-    recepient_name: '',
+    receiver_id: undefined,
     kpis: [],
   });
+
   const [error, setError] = useState<string | null>(null);
+  const [sentPartnership, setSentPartnership] = useState<Partnership | null>(null);
 
   const organization = useCurrentOrganization();
   const org_id = organization?.id;
@@ -157,17 +173,28 @@ const CreatePartnershipModalToggle: React.FC = () => {
         },
         body: JSON.stringify(formData),
       });
+<<<<<<< HEAD
       console.log(formData)
       if (!response.ok) throw new Error('Failed to create partnership');
       setIsOpen(false); // Close modal on success
+=======
+
+      if (!response.ok) throw new Error('Failed to create partnership');
+      const data = await response.json();
+      setIsOpen(false);
+>>>>>>> main
       console.log('Partnership created successfully');
+      setSentPartnership(data);
     } catch (error: any) {
       console.error('Error creating partnership:', error.message);
       setError(error.message);
     }
   };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
   return (
     <>
       <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
@@ -233,7 +260,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
                 <CardContent className="space-y-2">
                   <div className="space-y-1">
                     <Label htmlFor="partnershipFormat">Partnership Format</Label>
-                    <Select onValueChange={handleSelectChange}>
+                    <Select onValueChange={handleSelectChange} value={formData.partnershipFormat}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a format" />
                       </SelectTrigger>
@@ -288,7 +315,13 @@ const CreatePartnershipModalToggle: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
+<<<<<<< HEAD
                   <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
+=======
+                  <Button type="submit">
+                    <Trans i18nKey={'Send Partnership'} />
+                  </Button>
+>>>>>>> main
                 </CardFooter>
               </Card>
             </TabsContent>

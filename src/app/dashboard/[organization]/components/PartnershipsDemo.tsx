@@ -644,3 +644,435 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
     </Modal>
   );
 };
+
+
+const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
+  partnership,
+  isOpen,
+  setIsOpen,
+  updatePartnershipInState,
+}) => {
+
+  const [formData, setFormData] = useState({
+    partnerName: partnership?.partner_name || '',
+    partnershipName: partnership?.partnership_name || '',
+    partnershipType: partnership?.type || 'sent',
+    partnershipFormat: partnership?.format || 'In-person event',
+    durationStart: partnership?.duration_start || '',
+    durationEnd: partnership?.duration_end || '',
+    fundingAmount: partnership?.funding || 0,
+    details: partnership?.details || '',
+    sender_id: partnership?.sender_id || undefined,
+    sender_name: partnership?.sender_name || undefined,
+    receiver_id: partnership?.receiver_id || undefined,
+    kpis: partnership?.kpis || [],
+  });
+
+  // Added useEffect to update form data when partnership changes
+  useEffect(() => {
+    if (partnership) {
+      setFormData({
+        partnerName: partnership.partner_name,
+        partnershipName: partnership.partnership_name,
+        partnershipType: partnership.type,
+        partnershipFormat: partnership.format,
+        durationStart: partnership.duration_start,
+        durationEnd: partnership.duration_end,
+        fundingAmount: partnership.funding,
+        details: partnership.details,
+        sender_id: partnership.sender_id,
+        sender_name: partnership.sender_name,
+        receiver_id: partnership.receiver_id,
+        kpis: partnership.kpis,
+      });
+    }
+  }, [partnership]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData({
+      ...formData,
+      partnershipFormat: value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error('Failed to update partnership');
+
+      const updatedPartnership = await response.json();
+
+      // Call the callback function to update the local state
+      updatePartnershipInState(updatedPartnership);
+
+      setIsOpen(false);
+      console.log('Partnership updated successfully');
+    } catch (error: any) {
+      console.error('Error updating partnership:', error.message);
+    }
+  };
+
+
+  return (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="Edit Partnership">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Tabs defaultValue="Recipient" className="w-full max-w-xl">
+          <TabsList className="grid grid-cols-3 gap-5">
+            <TabsTrigger value="Recipient">Recipient</TabsTrigger>
+            <TabsTrigger value="Details">Details</TabsTrigger>
+            <TabsTrigger value="KPI">KPI's</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="Recipient">
+            <Card>
+              <CardHeader>
+                <CardTitle>Edit Partnership</CardTitle>
+                <CardDescription>
+                  Edit the details of the partnership.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipName">Partnership Name</Label>
+                  <TextField.Input
+                    id="partnershipName"
+                    name="partnershipName"
+                    value={formData.partnershipName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="Details">
+            <Card>
+              <CardHeader>
+                <CardTitle>Partnership Detail</CardTitle>
+                <CardDescription>
+                  Provide a brief description of your partnership
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipFormat">Partnership Format</Label>
+                  <Select onValueChange={handleSelectChange} value={formData.partnershipFormat}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a format" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="In-person event">In-person event</SelectItem>
+                        <SelectItem value="Online event">Online event</SelectItem>
+                        <SelectItem value="Research">Research</SelectItem>
+                        <SelectItem value="Consulting project">Consulting project</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationStart">Start Date</Label>
+                  <TextField.Input
+                    id="durationStart"
+                    name="durationStart"
+                    value={formData.durationStart}
+                    onChange={handleInputChange}
+                    type="date"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationEnd">End Date</Label>
+                  <TextField.Input
+                    id="durationEnd"
+                    name="durationEnd"
+                    value={formData.durationEnd}
+                    onChange={handleInputChange}
+                    type="date"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="fundingAmount">Funding</Label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">$</span>
+                    <TextField.Input
+                      id="fundingAmount"
+                      name="fundingAmount"
+                      value={formData.fundingAmount}
+                      onChange={handleInputChange}
+                      type="number"
+                      className="pl-7"
+                    />
+                  </div>
+                  <span className="text-sm text-gray-500">USD</span>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="KPI">
+            <Card>
+              <CardHeader>
+                <CardTitle>KPI's</CardTitle>
+                <CardDescription>
+                  Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({ ...formData, kpis: newKpis })} />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button onClick={() => setIsOpen(false)} type="submit">Save Changes</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </form>
+    </Modal>
+  );
+};
+
+const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: boolean }> = ({
+  partnership,
+  isOpen,
+  setIsOpen,
+  updatePartnershipInState,
+  isViewOnly = false,
+}) => {
+
+  const [formData, setFormData] = useState({
+    partnerName: partnership?.partner_name || '',
+    partnershipName: partnership?.partnership_name || '',
+    partnershipType: partnership?.type || 'sent',
+    partnershipFormat: partnership?.format || 'In-person event',
+    durationStart: partnership?.duration_start || '',
+    durationEnd: partnership?.duration_end || '',
+    fundingAmount: partnership?.funding || 0,
+    details: partnership?.details || '',
+    sender_id: partnership?.sender_id || undefined,
+    sender_name: partnership?.sender_name || undefined,
+    receiver_id: partnership?.receiver_id || undefined,
+    kpis: partnership?.kpis || [],
+  });
+
+  // Added useEffect to update form data when partnership changes
+  useEffect(() => {
+    if (partnership) {
+      setFormData({
+        partnerName: partnership.partner_name,
+        partnershipName: partnership.partnership_name,
+        partnershipType: partnership.type,
+        partnershipFormat: partnership.format,
+        durationStart: partnership.duration_start,
+        durationEnd: partnership.duration_end,
+        fundingAmount: partnership.funding,
+        details: partnership.details,
+        sender_id: partnership.sender_id,
+        sender_name: partnership.sender_name,
+        receiver_id: partnership.receiver_id,
+        kpis: partnership.kpis,
+      });
+    }
+  }, [partnership]);
+
+  const handleAccept = async () => {
+    try {
+      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'accepted' }),
+      });
+
+      if (!response.ok) throw new Error('Failed to accept partnership');
+
+      const updatedPartnership = await response.json();
+
+      updatePartnershipInState(updatedPartnership);
+
+      setIsOpen(false);
+      console.log('Partnership accepted successfully');
+    } catch (error: any) {
+      console.error('Error accepting partnership:', error.message);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData({
+      ...formData,
+      partnershipFormat: value,
+    });
+  };
+
+  const handleDecline = async () => {
+    try {
+      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'declined' }),
+      });
+
+      if (!response.ok) throw new Error('Failed to decline partnership');
+
+      const updatedPartnership = await response.json();
+
+      updatePartnershipInState(updatedPartnership);
+
+      setIsOpen(false);
+      console.log('Partnership declined successfully');
+    } catch (error: any) {
+      console.error('Error declining partnership:', error.message);
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="View Partnership">
+      <div className="space-y-4">
+        <Tabs defaultValue="Recipient" className="w-full max-w-xl">
+          <TabsList className="grid grid-cols-3 gap-5">
+            <TabsTrigger value="Recipient">Recipient</TabsTrigger>
+            <TabsTrigger value="Details">Details</TabsTrigger>
+            <TabsTrigger value="KPI">KPI's</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="Recipient">
+            <Card>
+              <CardHeader>
+                <CardTitle>View Partnership</CardTitle>
+                <CardDescription>
+                  View the details of the partnership.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipName">Partnership Name</Label>
+                  <TextField.Input
+                    id="partnershipName"
+                    name="partnershipName"
+                    value={formData.partnershipName}
+                    onChange={handleInputChange}
+                    readOnly
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="Details">
+            <Card>
+              <CardHeader>
+                <CardTitle>Partnership Detail</CardTitle>
+                <CardDescription>
+                  Provide a brief description of your partnership
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="partnershipFormat">Partnership Format</Label>
+                  <Select onValueChange={handleSelectChange} value={formData.partnershipFormat} disabled>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a format" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="In-person event">In-person event</SelectItem>
+                        <SelectItem value="Online event">Online event</SelectItem>
+                        <SelectItem value="Research">Research</SelectItem>
+                        <SelectItem value="Consulting project">Consulting project</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationStart">Start Date</Label>
+                  <TextField.Input
+                    id="durationStart"
+                    name="durationStart"
+                    value={formData.durationStart}
+                    onChange={handleInputChange}
+                    type="date"
+                    readOnly
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="durationEnd">End Date</Label>
+                  <TextField.Input
+                    id="durationEnd"
+                    name="durationEnd"
+                    value={formData.durationEnd}
+                    onChange={handleInputChange}
+                    type="date"
+                    readOnly
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="fundingAmount">Funding</Label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3">$</span>
+                    <TextField.Input
+                      id="fundingAmount"
+                      name="fundingAmount"
+                      value={formData.fundingAmount}
+                      onChange={handleInputChange}
+                      type="number"
+                      className="pl-7"
+                      readOnly
+                    />
+                  </div>
+                  <span className="text-sm text-gray-500">USD</span>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="KPI">
+            <Card>
+              <CardHeader>
+                <CardTitle>KPI's</CardTitle>
+                <CardDescription>
+                  Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <KPIForm kpis={formData.kpis} setKpis={(newKpis) => setFormData({ ...formData, kpis: newKpis })} />
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-center space-x-4">
+                <Button onClick={handleAccept} type="button">Accept Partnership</Button>
+                <Button onClick={handleDecline} type="button">Decline Partnership</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </Modal>
+  );
+};

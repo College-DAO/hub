@@ -9,27 +9,6 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'PUT') {
     const { id } = req.query;
-<<<<<<< HEAD
-    const updatedData = req.body;
-
-    try {
-      // Update the partnership in your database
-      const { data, error } = await supabase
-        .from('partnerships')
-        .update(updatedData)
-        .eq('id', id);
-
-      if (error) {
-        console.error('Supabase Error', { 
-          message: error.message, 
-          code: error.code, 
-          details: error.details, 
-          hint: error.hint,
-        });
-        return res.status(500).json({ 
-          error: 'Failed to update partnership', 
-          details: error.message, 
-=======
     const {
       partnerName,
       partnershipName,
@@ -76,7 +55,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({
           error: 'Failed to update partnership',
           details: error.message,
->>>>>>> main
           code: error.code,
         });
       }
