@@ -72,10 +72,14 @@ export default function PartnershipsDemo() {
   };
 
   const handleView = (partnership: Partnership) => {
+    if (!partnership.status) {
+      partnership.status = 'active'; // Ensure initial status is 'active'
+    }
     setEditPartnership(partnership);
     setAction('view'); // Set action to view
     setIsModalOpen(true); // Open the modal
   };
+
 
   const updatePartnershipInState = (updatedPartnership: Partnership) => {
     setPartnerships((prev) =>
@@ -134,7 +138,7 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
       setIsLoading(true);
       try {
         const response = await fetch(`/api/partnerships?type=${type}&userId=${org_id}`, {
-          method: 'GET', 
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -143,7 +147,7 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        
+
         const data = await response.json();
         setPartnerships(data);
       } catch (error) {
@@ -182,8 +186,16 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.duration_end}</TableCell>
             <TableCell>
-              <Tile.Badge trend={partnership.status}>Active</Tile.Badge>
-            </TableCell> 
+              <Tile.Badge
+                trend={partnership.status}
+                className={
+                  partnership.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                    partnership.status === 'declined' ? 'bg-red-100 text-red-800' :
+                      'bg-gray-100 text-gray-800'
+                }
+              >
+                {partnership.status === 'accepted' ? 'Accepted' : partnership.status === 'declined' ? 'Declined' : 'Active'}
+              </Tile.Badge>            </TableCell>
             {type === 'sent' && (
               <TableCell>
                 <Button onClick={() => handleEdit(partnership)}>Edit</Button>
@@ -471,7 +483,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
     }
   };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -622,8 +634,8 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-                <Button onClick={handleAccept} type="button">Decline Partnership</Button>
-                <Button onClick={handleDecline} type="button">Accept Partnership</Button>
+                <Button onClick={handleAccept} type="button">Accept Partnership</Button>
+                <Button onClick={handleDecline} type="button">Decline Partnership</Button>
               </CardFooter>
             </Card>
           </TabsContent>
