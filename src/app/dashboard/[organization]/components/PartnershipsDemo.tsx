@@ -646,7 +646,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
 };
 
 
-const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
+const EditPartnershipModal2: React.FC<EditPartnershipModalProps> = ({
   partnership,
   isOpen,
   setIsOpen,
@@ -849,7 +849,7 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
   );
 };
 
-const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: boolean }> = ({
+const ViewPartnershipModal2: React.FC<EditPartnershipModalProps & { isViewOnly?: boolean }> = ({
   partnership,
   isOpen,
   setIsOpen,

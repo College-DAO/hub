@@ -33,10 +33,6 @@ import {
 } from '~/core/ui/Select';
 import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
 
-<<<<<<< HEAD
-// Initialize Supabase client
-=======
->>>>>>> main
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 interface Partnership {
@@ -57,6 +53,7 @@ interface Partnership {
 
 const CreatePartnershipModalToggle: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<{
     partnerName: string;
     partnershipName: string;
@@ -87,6 +84,8 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [sentPartnership, setSentPartnership] = useState<Partnership | null>(null);
+  const [searchErrorModalOpen, setSearchErrorModalOpen] = useState<boolean>(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const organization = useCurrentOrganization();
   const org_id = organization?.id;
@@ -103,11 +102,13 @@ const CreatePartnershipModalToggle: React.FC = () => {
       if (!response.ok) throw new Error('Network response was not ok.');
       const data = await response.json();
       setSearchResults(data);
-    } catch (error) {
-      console.error('Failed to fetch search results:', error);
-      setSearchResults([]);
+      setSearchError(null); // Clear any previous errors
+    } catch (error: any) {
+      setSearchError(error.message);
+      setSearchErrorModalOpen(true); // Show error modal
     }
   };
+
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -162,9 +163,6 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted'); // Log to check if submit is triggered
-    console.log('Form data before submit:', formData); // Log form data
-
     try {
       const response = await fetch('/api/partnerships/create', {
         method: 'POST',
@@ -173,28 +171,18 @@ const CreatePartnershipModalToggle: React.FC = () => {
         },
         body: JSON.stringify(formData),
       });
-<<<<<<< HEAD
-      console.log(formData)
-      if (!response.ok) throw new Error('Failed to create partnership');
-      setIsOpen(false); // Close modal on success
-=======
 
       if (!response.ok) throw new Error('Failed to create partnership');
       const data = await response.json();
       setIsOpen(false);
->>>>>>> main
-      console.log('Partnership created successfully');
       setSentPartnership(data);
+      setError(null); // Clear any previous errors
     } catch (error: any) {
-      console.error('Error creating partnership:', error.message);
       setError(error.message);
+      setErrorModalOpen(true); // Show error modal
     }
   };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
   return (
     <>
       <Button size={'sm'} variant={'outline'} onClick={() => setIsOpen(true)}>
@@ -210,6 +198,25 @@ const CreatePartnershipModalToggle: React.FC = () => {
               <TabsTrigger value="Details">Details</TabsTrigger>
               <TabsTrigger value="KPI">KPI's</TabsTrigger>
             </TabsList>
+
+            {errorModalOpen && (
+              <Modal isOpen={errorModalOpen} setIsOpen={setErrorModalOpen} heading="Error">
+                <div className="space-y-4">
+                  <p>{error}</p>
+                  <Button onClick={() => setErrorModalOpen(false)}>Close</Button>
+                </div>
+              </Modal>
+            )}
+
+            {searchErrorModalOpen && (
+              <Modal isOpen={searchErrorModalOpen} setIsOpen={setSearchErrorModalOpen} heading="Error">
+                <div className="space-y-4">
+                  <p>{searchError}</p>
+                  <Button onClick={() => setSearchErrorModalOpen(false)}>Close</Button>
+                </div>
+              </Modal>
+            )}
+
 
             <TabsContent value="Recipient">
               <Card>
@@ -315,13 +322,9 @@ const CreatePartnershipModalToggle: React.FC = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-<<<<<<< HEAD
-                  <Button type="submit"><Trans i18nKey={'Send Partnership'} /></Button>
-=======
                   <Button type="submit">
                     <Trans i18nKey={'Send Partnership'} />
                   </Button>
->>>>>>> main
                 </CardFooter>
               </Card>
             </TabsContent>
