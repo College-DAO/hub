@@ -1,17 +1,43 @@
 import useSupabase from "~/core/hooks/use-supabase";
 import { SupabaseClient } from '@supabase/supabase-js';
 
+export interface Kpi {
+    name: string;
+    date: string;
+    price: string;
+  }
+
 interface Partnership {
   id: number;
   sender_id: number;
+  sender_name: string;
   receiver_id: number;
+  recepient_name: string;
+  partnerName: string;
+  partnershipName: string;
+  partnershipType: string;
+  partnershipFormat: string;
+  durationStart: string;
+  durationEnd: string;
+  fundingAmount: number;
   details: string;
+  kpis: Kpi[];
 }
 
 interface PartnershipData {
   sender_id: number;
+  sender_name: string;
   receiver_id: number;
+  recepient_name: string;
+  partnerName: string;
+  partnershipName: string;
+  partnershipType: string;
+  partnershipFormat: string;
+  durationStart: string;
+  durationEnd: string;
+  fundingAmount: number;
   details: string;
+  kpis: Kpi[];
 }
 
 export function useSendPartnership() {
@@ -25,11 +51,9 @@ export function useSendPartnership() {
         if (error) {
             throw error;
         }
-        //needs to check if there was any data
         if (!data) {
             throw new Error('No data');
         }
-        //return the partnership data
         return data as Partnership[];
     }
 
