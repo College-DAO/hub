@@ -8,12 +8,12 @@ import Tile from '~/core/ui/Tile';
 import Heading from '~/core/ui/Heading';
 import useUserSession from '~/core/hooks/use-user-session';
 import { getUserById } from '~/lib/user/database/queries';
-import { getPartnerships } from '~/lib/partnerships/queries'
+import { getPartnerships } from '~/lib/partnerships/queries';
 import Partnership from '~/lib/partnerships/partnership';
 import useSWR from 'swr';
 import useSupabase from '~/core/hooks/use-supabase';
 import KPIForm, { Kpi } from './KPIForm';
-import useCurrentOrganization from "~/lib/organizations/hooks/use-current-organization";
+import useCurrentOrganization from '~/lib/organizations/hooks/use-current-organization';
 import Button from '~/core/ui/Button';
 import {
   Table,
@@ -51,6 +51,8 @@ import {
 
 interface PartnershipsTableProps {
   type: 'sent' | 'received';
+  handleEdit: (partnership: Partnership) => void;
+  handleView: (partnership: Partnership) => void;
 }
 interface EditPartnershipModalProps {
   partnership: Partnership | null;
@@ -82,7 +84,6 @@ export default function PartnershipsDemo() {
       prev.map((p) => (p.id === updatedPartnership.id ? updatedPartnership : p))
     );
   };
-
 
   return (
     <div className={'flex flex-col space-y-6 pb-36'}>
@@ -122,7 +123,7 @@ export default function PartnershipsDemo() {
   );
 }
 
-function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTableProps & { handleEdit: (partnership: Partnership) => void, handleView: (partnership: Partnership) => void }) {
+function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTableProps) {
   const [partnerships, setPartnerships] = useState<Partnership[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -134,7 +135,7 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
       setIsLoading(true);
       try {
         const response = await fetch(`/api/partnerships?type=${type}&userId=${org_id}`, {
-          method: 'GET', 
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -143,7 +144,7 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        
+
         const data = await response.json();
         setPartnerships(data);
       } catch (error) {
@@ -155,7 +156,18 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
     };
 
     fetchData();
-  }, [type, org_id]);  // Re-fetch the data when the "type" or "org_id" prop changes
+  }, [type, org_id]); // Re-fetch the data when the "type" or "org_id" prop changes
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'accepted':
+        return <Tile.Badge trend="up">Accepted</Tile.Badge>;
+      case 'declined':
+        return <Tile.Badge trend="down">Declined</Tile.Badge>;
+      default:
+        return <Tile.Badge trend="stale">Pending</Tile.Badge>;
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -182,8 +194,8 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.duration_end}</TableCell>
             <TableCell>
-              <Tile.Badge trend={partnership.status}>Active</Tile.Badge>
-            </TableCell> 
+              {getStatusBadge(partnership.status)}
+            </TableCell>
             {type === 'sent' && (
               <TableCell>
                 <Button onClick={() => handleEdit(partnership)}>Edit</Button>
@@ -201,14 +213,12 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
   );
 }
 
-
 const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
   partnership,
   isOpen,
   setIsOpen,
   updatePartnershipInState,
 }) => {
-
   const [formData, setFormData] = useState({
     partnerName: partnership?.partner_name || '',
     partnershipName: partnership?.partnership_name || '',
@@ -284,7 +294,6 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
       console.error('Error updating partnership:', error.message);
     }
   };
-
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} heading="Edit Partnership">
@@ -412,7 +421,6 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
   updatePartnershipInState,
   isViewOnly = false,
 }) => {
-
   const [formData, setFormData] = useState({
     partnerName: partnership?.partner_name || '',
     partnershipName: partnership?.partnership_name || '',
@@ -471,21 +479,6 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
     }
   };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSelectChange = (value: string) => {
-    setFormData({
-      ...formData,
-      partnershipFormat: value,
-    });
-  };
-
   const handleDecline = async () => {
     try {
       const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
@@ -534,7 +527,6 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                     id="partnershipName"
                     name="partnershipName"
                     value={formData.partnershipName}
-                    onChange={handleInputChange}
                     readOnly
                   />
                 </div>
@@ -552,7 +544,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
               <CardContent className="space-y-2">
                 <div className="space-y-1">
                   <Label htmlFor="partnershipFormat">Partnership Format</Label>
-                  <Select onValueChange={handleSelectChange} value={formData.partnershipFormat} disabled>
+                  <Select value={formData.partnershipFormat} disabled>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a format" />
                     </SelectTrigger>
@@ -573,8 +565,6 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                     id="durationStart"
                     name="durationStart"
                     value={formData.durationStart}
-                    onChange={handleInputChange}
-                    type="date"
                     readOnly
                   />
                 </div>
@@ -584,8 +574,6 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                     id="durationEnd"
                     name="durationEnd"
                     value={formData.durationEnd}
-                    onChange={handleInputChange}
-                    type="date"
                     readOnly
                   />
                 </div>
@@ -597,10 +585,8 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                       id="fundingAmount"
                       name="fundingAmount"
                       value={formData.fundingAmount}
-                      onChange={handleInputChange}
-                      type="number"
-                      className="pl-7"
                       readOnly
+                      className="pl-7"
                     />
                   </div>
                   <span className="text-sm text-gray-500">USD</span>
@@ -622,8 +608,8 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-                <Button onClick={handleAccept} type="button">Decline Partnership</Button>
-                <Button onClick={handleDecline} type="button">Accept Partnership</Button>
+              <Button onClick={() => { handleAccept(); setIsOpen(false); }} type="button">Accept Partnership</Button>
+              <Button onClick={() => { handleDecline(); setIsOpen(false); }} type="button">Decline Partnership</Button>
               </CardFooter>
             </Card>
           </TabsContent>

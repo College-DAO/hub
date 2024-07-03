@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom';
 import { Card } from '../components/ui/Card/Card';
-import { CloseCircleIcon, EarthIcon } from '../assets/icons';
 import { ButtonGroup } from '../components/ui/ButtonGroup/ButtonGroup';
 import { ExternalLink } from '../components/ui/ExternalLink/ExternalLink';
 import { ZoneLogo } from '../components/ui/ZoneLogo/ZoneLogo';
@@ -69,7 +68,6 @@ function Sidebar({ selectedZone, onClose }: SidebarProps) {
             >
               {data.website && (
                 <ExternalLink
-                  Icon={EarthIcon}
                   href={data.website}
                 >
                   {data.website}
@@ -90,26 +88,26 @@ function Sidebar({ selectedZone, onClose }: SidebarProps) {
 
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={'IBC Transfers'}
-            defaultLoadingValue={'72 235'}
+            title={'Member Count'}
+            defaultLoadingValue={'12345'}
             //value = {100}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={'Peers'}
-            defaultLoadingValue={'12'}
+            title={'Expertise'}
+            defaultLoadingValue={'DeFi, Consulting'}
           ></ZoneOverviewItem>
           <ZoneOverviewItem
             className={styles.detailedInfoItem}
-            title={'Channels'}
-            defaultLoadingValue={'250'}
+            title={'Location'}
+            defaultLoadingValue={'USA'}
           ></ZoneOverviewItem>
-          <ZoneOverviewItem
+          {/* <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={"dauTitle"}
             value={0}
-          ></ZoneOverviewItem>
-          <ZoneOverviewItem
+          ></ZoneOverviewItem> */}
+          {/* <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={`IBC`}
           >
@@ -119,8 +117,8 @@ function Sidebar({ selectedZone, onClose }: SidebarProps) {
               (<NumberFormat value={0} numberType={NumberType.Percent} />
               {` of ${0}`})
             </span>
-          </ZoneOverviewItem>
-          <ZoneOverviewItem
+          </ZoneOverviewItem> */}
+          {/* <ZoneOverviewItem
             className={styles.detailedInfoItem}
             title={'Token Price'}
             defaultLoadingValue={'$10.45'}
@@ -132,7 +130,7 @@ function Sidebar({ selectedZone, onClose }: SidebarProps) {
             className={styles.detailedInfoItem}
             title={'Market Cap'}
             defaultLoadingValue={'$123,456,789'}
-          ></ZoneOverviewItem>
+          ></ZoneOverviewItem> */}
         </div>
       </Card>
       </motion.div>
