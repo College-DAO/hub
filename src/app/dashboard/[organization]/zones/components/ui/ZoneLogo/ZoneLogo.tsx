@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import Image from 'next/image';
-import { SkeletonCircle } from 'components';
+import { SkeletonCircle } from '../../Skeleton';
 
 import styles from './ZoneLogo.module.scss';
 import { ZoneLogoProps } from './ZoneLogo.props';

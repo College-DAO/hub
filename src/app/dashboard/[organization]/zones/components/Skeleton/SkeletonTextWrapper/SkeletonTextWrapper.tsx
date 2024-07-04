@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
-
-import { SkeletonRectangle } from 'components';
-
+import { SkeletonRectangle } from '~/components/Skeleton';
 import { SkeletonTextWrapperProps } from './SkeletonTextWrapper.props';
 
 function getTextwithSize(minLength: number, maxLength: number) {

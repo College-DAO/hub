@@ -1,6 +1,12 @@
 import { DetailedHTMLProps, HtmlHTMLAttributes, ReactNode } from 'react';
 
-import { NumberType, PeriodKeys } from 'components';
+import { NumberType } from '../../components/ui/NumberFormat';
+
+enum PeriodKeys {
+  DAY = '24h',
+  WEEK = '7d',
+  MONTH = '30d',
+}
 
 export interface ZoneOverviewItemProps
   extends DetailedHTMLProps<HtmlHTMLAttributes<HTMLDivElement>, HTMLDivElement> {

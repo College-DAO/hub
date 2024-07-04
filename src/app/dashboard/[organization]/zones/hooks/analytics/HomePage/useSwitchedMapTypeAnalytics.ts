@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { ColumnKeys } from 'pages/HomePage/Types';
+import { ColumnKeys } from '../../../Types';
 
 import { HOME_PAGE_TABLE_COLUMN_TITLE } from './useViewedHomePageAnalytics';
 import { getZoneNameFromHomePageQuery } from './utils';
