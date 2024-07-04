@@ -11,13 +11,14 @@ import React, {
 } from 'react';
 
 import { CloudArrowUpIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 import Label from '~/core/ui/Label';
 import If from '~/core/ui/If';
 import IconButton from '~/core/ui/IconButton';
 import classNames from 'clsx';
 
-type Props = Omit<React.InputHTMLAttributes<unknown>, 'value'> & {
+type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'> & {
   image?: string | null;
   onClear?: () => void;
   onValueChange?: (props: { image: string; file: File }) => void;
@@ -155,7 +156,7 @@ const ImageUploadInput = forwardRef<React.ElementRef<'input'>, Props>(
             </If>
 
             <If condition={state.image}>
-              <img
+              <Image
                 loading={'lazy'}
                 style={{
                   width: IMAGE_SIZE,

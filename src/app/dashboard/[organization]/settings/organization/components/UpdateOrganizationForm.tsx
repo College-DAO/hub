@@ -57,7 +57,7 @@ const UpdateOrganizationForm = () => {
         error: t(`updateOrganizationErrorMessage`),
       });
     },
-    [organization, setOrganization, t, updateOrganizationMutation],
+    [organization, setOrganization, t, updateOrganizationMutation]
   );
 
   const onSubmit = useCallback(
@@ -80,7 +80,7 @@ const UpdateOrganizationForm = () => {
 
       return updateOrganizationData(organizationData);
     },
-    [organization?.id, updateOrganizationData, t],
+    [organization?.id, updateOrganizationData, t, socials]
   );
 
   useEffect(() => {
@@ -193,7 +193,7 @@ function UploadLogoForm(props: {
         error: t(`updateOrganizationErrorMessage`),
       });
     },
-    [t],
+    [t]
   );
 
   const onValueChange = useCallback(
@@ -213,7 +213,7 @@ function UploadLogoForm(props: {
               client,
               organizationId: props.organizationId,
               logo: file,
-            }),
+            })
           )
           .then((url) => {
             props.onLogoUpdated(url);
@@ -228,7 +228,7 @@ function UploadLogoForm(props: {
         createToaster(promise);
       }
     },
-    [client, createToaster, props],
+    [client, createToaster, props]
   );
 
   return (

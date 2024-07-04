@@ -35,7 +35,7 @@ export function SeeDetailsPopupButton({
         },
       });
     }
-  }, [zoomValue, selectedZoneKey]);
+  }, [zoomValue, selectedZoneKey, animationControls, y]);
 
   const navigateWithSearchParams = useNavigateWithSearchParams();
 

@@ -302,7 +302,7 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
           <TabsList className="grid grid-cols-3 gap-5">
             <TabsTrigger value="Recipient">Recipient</TabsTrigger>
             <TabsTrigger value="Details">Details</TabsTrigger>
-            <TabsTrigger value="KPI">KPI's</TabsTrigger>
+            <TabsTrigger value="KPI">KPI&apos;s</TabsTrigger>
           </TabsList>
 
           <TabsContent value="Recipient">
@@ -393,9 +393,9 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
           <TabsContent value="KPI">
             <Card>
               <CardHeader>
-                <CardTitle>KPI's</CardTitle>
+                <CardTitle>KPI&apos;s</CardTitle>
                 <CardDescription>
-                  Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                  Add KPI&apos;s to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -509,7 +509,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
           <TabsList className="grid grid-cols-3 gap-5">
             <TabsTrigger value="Recipient">Recipient</TabsTrigger>
             <TabsTrigger value="Details">Details</TabsTrigger>
-            <TabsTrigger value="KPI">KPI's</TabsTrigger>
+            <TabsTrigger value="KPI">KPI&apos;s</TabsTrigger>
           </TabsList>
 
           <TabsContent value="Recipient">
@@ -597,9 +597,9 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
           <TabsContent value="KPI">
             <Card>
               <CardHeader>
-                <CardTitle>KPI's</CardTitle>
+                <CardTitle>KPI&apos;s</CardTitle>
                 <CardDescription>
-                  Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                  Add KPI&apos;s to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -608,8 +608,8 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-              <Button onClick={() => { handleAccept(); setIsOpen(false); }} type="button">Accept Partnership</Button>
-              <Button onClick={() => { handleDecline(); setIsOpen(false); }} type="button">Decline Partnership</Button>
+                <Button onClick={() => { handleAccept(); setIsOpen(false); }} type="button">Accept Partnership</Button>
+                <Button onClick={() => { handleDecline(); setIsOpen(false); }} type="button">Decline Partnership</Button>
               </CardFooter>
             </Card>
           </TabsContent>

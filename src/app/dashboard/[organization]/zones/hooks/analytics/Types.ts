@@ -3,8 +3,7 @@ export interface Page {
   pathname: string;
   search: SearchProps;
   title: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  state?: any;
+  state?: unknown; // Replace 'any' with 'unknown' or a more specific type if known
 }
 
 export interface SearchProps {

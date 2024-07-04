@@ -1,4 +1,3 @@
-/* eslint-disable sort-exports/sort-exports */
 import React from 'react';
 
 import { NumberFormatProps } from './NumberFormat.props';

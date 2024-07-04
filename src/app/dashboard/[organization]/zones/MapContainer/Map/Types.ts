@@ -50,7 +50,6 @@ export interface Position {
 
 export type SelectedZoneKeyType = string | undefined;
 
-// eslint-disable-next-line sort-exports/sort-exports
 export interface GraphDataApi {
   links: ZoneLinkApi[];
   nodes: ZoneStatApi[];

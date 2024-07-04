@@ -1,5 +1,5 @@
 import cn from 'classnames';
-
+import Image from 'next/image';
 import { SkeletonCircle } from 'components';
 
 import styles from './ZoneLogo.module.scss';
@@ -24,7 +24,7 @@ export function ZoneLogo({
         <div className={classes} style={style} {...props}>
           {logoUrl && (
             <>
-              <img src={logoUrl} style={style} />
+              <Image src={logoUrl} alt={`${name} logo`} width={parseInt(size)} height={parseInt(size)} />
               <div
                 className={cn(styles.shadow, {
                   [styles.withOuterShadow]: withOuterShadow,

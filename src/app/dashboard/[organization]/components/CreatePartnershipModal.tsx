@@ -139,7 +139,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
         sender_name: org_name,
       }));
     }
-  }, [org_id]);
+  }, [org_id, org_name]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -191,7 +191,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
             <TabsList className="grid grid-cols-3 gap-5">
               <TabsTrigger value="Recipient">Recipient</TabsTrigger>
               <TabsTrigger value="Details">Details</TabsTrigger>
-              <TabsTrigger value="KPI">KPI's</TabsTrigger>
+              <TabsTrigger value="KPI">KPI&apos;s</TabsTrigger>
             </TabsList>
 
             <TabsContent value="Recipient">
@@ -287,9 +287,9 @@ const CreatePartnershipModalToggle: React.FC = () => {
             <TabsContent value="KPI">
               <Card>
                 <CardHeader>
-                  <CardTitle>KPI's</CardTitle>
+                  <CardTitle>KPI&apos;s</CardTitle>
                   <CardDescription>
-                    Add KPI's to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
+                    Add KPI&apos;s to your partnership. Name is the name of the KPI, Date is when you expect to finish, and price is funding
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">

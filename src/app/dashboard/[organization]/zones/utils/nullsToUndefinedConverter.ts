@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-types
-function isWritable<T extends Object>(obj: T, key: keyof T) {
+function isWritable<T extends Record<string, unknown>>(obj: T, key: keyof T) {
   const desc =
     Object.getOwnPropertyDescriptor(obj, key) ||
     Object.getOwnPropertyDescriptor(Object.getPrototypeOf(obj), key) ||
@@ -12,8 +11,7 @@ export function nullsToUndefined<T>(obj: T): RecursivelyReplaceNullWithUndefined
     return undefined as never;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((obj as any).constructor.name === 'Object' || Array.isArray(obj)) {
+  if (typeof obj === 'object' || Array.isArray(obj)) {
     for (const key in obj) {
       if (isWritable(obj, key)) {
         obj[key] = nullsToUndefined(obj[key]) as never;
