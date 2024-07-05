@@ -2,8 +2,7 @@ import { memo, useEffect } from 'react';
 
 import cn from 'classnames';
 import { motion, useAnimation } from 'framer-motion';
-
-import { ArrowRight } from '~/app/dashboard/[organization]/zones/assets/icons';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { SelectedZoneOverviewSource } from '~/app/dashboard/[organization]/zones/hooks/analytics/ZonePage/ZoneOverviewPage/useViewedZoneOverviewPageAnalytics';
 import { useNavigateWithSearchParams } from '~/app/dashboard/[organization]/zones/hooks/useNavigateWithSearchParams';
 import { getZonesOverviewPath } from '~/app/dashboard/[organization]/zones/routing';
@@ -66,7 +65,7 @@ export function SeeDetailsPopupButton({
       />
       <span className={styles.btnContent}>
         See Details
-        <ArrowRight
+        <ArrowRightIcon
           className={styles.arrowIcon}
           style={{
             width: `${6 * zoomValue}px`,

@@ -1,4 +1,8 @@
-import { PeriodKeys } from './../components/PeriodSelector/Types';
+enum PeriodKeys {
+  DAY = '24h',
+  WEEK = '7d',
+  MONTH = '30d',
+}
 interface ChartItemByNumber {
   [key: number]: number;
 }

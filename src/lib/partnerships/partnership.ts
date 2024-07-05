@@ -1,3 +1,4 @@
+import { Kpi } from "~/app/dashboard/[organization]/components/KPIForm";
 interface Partnership {
   id: string; // Replace with the specific type if possible, e.g., 'number' or 'string'
   sender_id: string; // Replace with the correct type, e.g., 'number' or 'string'
