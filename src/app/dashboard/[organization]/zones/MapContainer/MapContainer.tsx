@@ -13,7 +13,6 @@ import { Map } from './Map/Map';
 import styles from './MapContainer.module.scss';
 import { MapContainerProps } from './MapContainer.props';
 import { DefaultMapType, MapType } from './MapContainer.types';
-import { MapLegend } from './MapLegend';
 import { nodes, links } from '../mock_data';
 import nodeData from '../data.json'
 import {MapNode} from '~/app/dashboard/[organization]/zones//MapContainer/Map/Types';
