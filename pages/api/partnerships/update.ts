@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sender_id,
       sender_name,
       receiver_id,
-      recepient_name,
       kpis
     } = req.body;
 
@@ -40,7 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           sender_id: sender_id,
           sender_name: sender_name,
           receiver_id: receiver_id,
-          recepient_name: recepient_name,
           kpis: kpis
         })
         .eq('id', id);
