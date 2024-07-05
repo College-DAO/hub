@@ -4,14 +4,14 @@ import { useSortedHomePageZonesListAnalytics } from './useSortedHomePageZonesLis
 import { useSwitchedMapTypeAnalytics } from './useSwitchedMapTypeAnalytics';
 import { useSwitchedSidebarSubtabAnalytics } from './useSwitchedSidebarSubtabAnalytics';
 import { useViewedHomePageAnalytics } from './useViewedHomePageAnalytics';
-import { useViewedZoneOverviewSidebarAnalytics } from './useViewedZoneOverviewSidebarAnalytics';
+// import { useViewedZoneOverviewSidebarAnalytics } from './useViewedZoneOverviewSidebarAnalytics';
 import { useViewedZonePeersSidebarAnalytics } from './useViewedZonePeersSidebarAnalytics';
 import { Page } from '../Types';
 
 export function useHomePageAnalytics(currentPage: Page, prevPage: Page) {
   useViewedHomePageAnalytics(currentPage, prevPage);
   useSortedHomePageZonesListAnalytics(currentPage, prevPage);
-  useViewedZoneOverviewSidebarAnalytics(currentPage, prevPage);
+  // useViewedZoneOverviewSidebarAnalytics(currentPage, prevPage);
   useViewedZonePeersSidebarAnalytics(currentPage, prevPage);
   useChosenDetailsClickAnalytics(currentPage, prevPage);
   useClosedZoneSidebarAnalytics(currentPage, prevPage);

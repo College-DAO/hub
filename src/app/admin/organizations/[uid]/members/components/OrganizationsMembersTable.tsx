@@ -113,7 +113,7 @@ function OrganizationsMembersTable({
   });
 
   const router = useRouter();
-  const path = usePathname();
+  const path = usePathname() as string | URL;
 
   return (
     <DataTable

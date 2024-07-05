@@ -6,20 +6,20 @@ function isWritable<T extends Record<string, unknown>>(obj: T, key: keyof T) {
   return Boolean(desc.writable);
 }
 
-export function nullsToUndefined<T>(obj: T): RecursivelyReplaceNullWithUndefined<T> {
-  if (obj === null || obj === undefined) {
-    return undefined as never;
-  }
+// export function nullsToUndefined<T>(obj: T): RecursivelyReplaceNullWithUndefined<T> {
+//   if (obj === null || obj === undefined) {
+//     return undefined as never;
+//   }
 
-  if (typeof obj === 'object' || Array.isArray(obj)) {
-    for (const key in obj) {
-      if (isWritable(obj, key)) {
-        obj[key] = nullsToUndefined(obj[key]) as never;
-      }
-    }
-  }
-  return obj as never;
-}
+//   if (typeof obj === 'object' || Array.isArray(obj)) {
+//     for (const key in obj) {
+//       if (isWritable(obj, key)) {
+//         obj[key] = nullsToUndefined(obj[key]) as never;
+//       }
+//     }
+//   }
+//   return obj as never;
+// }
 
 type RecursivelyReplaceNullWithUndefined<T> = T extends null
   ? undefined

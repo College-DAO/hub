@@ -79,7 +79,7 @@ export function useAnalytics() {
   }, [debouncedLocation]);
 
   //useMultipageAnalytics(currentPage, prevPage, history);
-  useHomePageAnalytics(currentPage, prevPage);
+  // useHomePageAnalytics(currentPage, prevPage);
   //useZonesPageAnalytics(currentPage, prevPage);
   //useAssetsPageAnalytics(currentPage, prevPage);
   //useSwapPageAnalytics(currentPage, prevPage);
