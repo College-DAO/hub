@@ -83,8 +83,8 @@
     "nodemailer": "^6.9.12",
     "pino": "^8.19.0",
     "query-string": "^9.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-force-graph": "^1.44.3",
     "react-force-graph-2d": "^1.25.4",
     "react-hook-form": "^7.51.0",
@@ -111,8 +111,8 @@
     "@types/i18next-fs-backend": "^1.1.5",
     "@types/node": "20.11.24",
     "@types/nodemailer": "^6.4.14",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.18",
     "cypress": "13.6.6",
     "encoding": "^0.1.13",
@@ -126,7 +126,7 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "supabase": "^1.148.6",
     "tailwindcss": "^3.4.1",
-    "typescript": "5.4.2"
+    "typescript": "^5.4.2"
   },
   "engines": {
     "node": ">=18.17.0"
