@@ -1,7 +1,7 @@
 interface Organization {
   id: number;
-  uuid?: string;
-  name?: string;
+  uuid: string;
+  name: string;
   email?: string;
   type?: string;
   approved?: boolean;
