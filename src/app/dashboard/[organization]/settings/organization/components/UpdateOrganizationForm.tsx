@@ -142,7 +142,6 @@ const UpdateOrganizationForm = () => {
             />
           </TextField.Label>
         </TextField>
-        {/* TODO: Bro this form is not secure lol I need to fix this later with enums etc. */}
         <div>
           <Label>
             <Trans i18nKey={'organization:organizationTypeInputLabel'} />
