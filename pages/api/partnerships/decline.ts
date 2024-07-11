@@ -13,29 +13,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log(`Declining partnership ${id}`);
 
         try {
-            // Begin transaction to ensure atomicity
-            const { data: partnership, error: fetchError } = await supabase
-                .from('partnerships')
-                .select('sender_id, receiver_id')
-                .eq('id', id)
-                .single();
-
-            if (fetchError) {
-                console.error('Supabase fetch error', fetchError);
-                return res.status(500).json({
-                    error: 'Failed to fetch partnership details',
-                    details: fetchError.message,
-                });
-            }
-
-            if (!partnership) {
-                return res.status(404).json({ error: 'Partnership not found' });
-            }
-
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('partnerships')
                 .update({ status: 'declined' })
-                .in('id', [partnership.sender_id, partnership.receiver_id]);
+                .eq('id', id)
+                .single();
 
             if (error) {
                 console.error('Supabase Error', error);
@@ -45,8 +27,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 });
             }
 
-            console.log('Partnership declined successfully:', partnership);
-            return res.status(200).json(partnership);
+            if (!data) {
+                return res.status(404).json({ error: 'Partnership not found' });
+            }
+
+            console.log('Partnership declined successfully:', data);
+            return res.status(200).json(data);
         } catch (error) {
             console.error('Error declining partnership:', error);
             res.status(500).json({ error: 'Internal Server Error' });
