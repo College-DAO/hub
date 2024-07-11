@@ -434,9 +434,9 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
     sender_name: partnership?.sender_name || undefined,
     receiver_id: partnership?.receiver_id || undefined,
     kpis: partnership?.kpis || [],
+    status: partnership?.status || 'pending', // Add this line
   });
 
-  // Added useEffect to update form data when partnership changes
   useEffect(() => {
     if (partnership) {
       setFormData({
@@ -452,6 +452,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
         sender_name: partnership.sender_name,
         receiver_id: partnership.receiver_id,
         kpis: partnership.kpis,
+        status: partnership.status, // Add this line
       });
     }
   }, [partnership]);
@@ -471,14 +472,14 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
       const updatedPartnership = await response.json();
       console.log('Updated partnership:', updatedPartnership);
 
+
       updatePartnershipInState(updatedPartnership);
+      setFormData(prevState => ({ ...prevState, status: 'accepted' })); // Update local state
 
       setIsOpen(false);
       console.log('Partnership accepted successfully');
-      // Consider adding a user-facing success message here
     } catch (error: any) {
       console.error('Error accepting partnership:', error.message);
-      // Consider adding a user-facing error message here
     }
   };
 
@@ -496,6 +497,7 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
       const updatedPartnership = await response.json();
 
       updatePartnershipInState(updatedPartnership);
+      setFormData(prevState => ({ ...prevState, status: 'declined' })); // Update local state
 
       setIsOpen(false);
       console.log('Partnership declined successfully');
@@ -610,8 +612,20 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-                <Button onClick={handleAccept} type="button">Accept Partnership</Button>
-                <Button onClick={handleDecline} type="button">Decline Partnership</Button>
+                <Button
+                  onClick={handleAccept}
+                  type="button"
+                  disabled={formData.status !== 'pending'}
+                >
+                  Accept Partnership
+                </Button>
+                <Button
+                  onClick={handleDecline}
+                  type="button"
+                  disabled={formData.status !== 'pending'}
+                >
+                  Decline Partnership
+                </Button>
               </CardFooter>
             </Card>
           </TabsContent>
