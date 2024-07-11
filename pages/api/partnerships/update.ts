@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sender_name,
       receiver_id,
       kpis,
-      status: status // Include status in the request body
     } = req.body;
 
     const partnerships = [
@@ -38,7 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sender_name: sender_name,
         receiver_id: receiver_id,
         kpis: kpis,
-        status: status // Set the initial status directly
       },
       {
         partner_name: partnerName,
@@ -53,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sender_name: sender_name,
         receiver_id: receiver_id,
         kpis: kpis,
-        status: status
       }
     ];
 
