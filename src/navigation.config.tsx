@@ -3,6 +3,7 @@ import {
   Squares2X2Icon,
   UserGroupIcon,
   UserIcon,
+  TableCellsIcon,
   PaperAirplaneIcon,
   BriefcaseIcon
 } from '@heroicons/react/24/outline';
@@ -49,7 +50,7 @@ const NAVIGATION_CONFIG = (organization: string): NavigationConfig => ({
       label: 'Partnerships',
       path: getPath(organization, '/partnerships'),
       Icon: ({ className }: { className: string }) => {
-        return <Squares2X2Icon className={className} />;
+        return <TableCellsIcon className={className} />;
       },
       end: true,
     },
