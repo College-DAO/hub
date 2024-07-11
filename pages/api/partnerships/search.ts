@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { query } = req.query;
     
     const { data, error } = await supabase
-      .from('organizations_duplicate')
+      .from('organizations')
       .select('*')
       .ilike('name', `%${query}%`);
     
