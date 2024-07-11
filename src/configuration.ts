@@ -55,7 +55,7 @@ const configuration = {
     signInMfa: '/auth/verify',
     onboarding: `/onboarding`,
     appPrefix: '/dashboard',
-    appHome: '/auth/sign-in',
+    appHome: '/dashboard',
     partnerships: '/partnerships',
     authCallback: '/auth/callback',
     settings: {
