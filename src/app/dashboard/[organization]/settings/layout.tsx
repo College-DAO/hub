@@ -1,6 +1,4 @@
 import React from 'react';
-import { useContext } from 'react';
-import OrganizationContext from '~/lib/contexts/organization';
 import NavigationMenu from '~/core/ui/Navigation/NavigationMenu';
 import NavigationItem from '~/core/ui/Navigation/NavigationItem';
 import AppHeader from '~/app/dashboard/[organization]/components/AppHeader';
@@ -8,10 +6,23 @@ import { withI18n } from '~/i18n/with-i18n';
 import { PageBody } from '~/core/ui/Page';
 import Trans from '~/core/ui/Trans';
 import configuration from '~/configuration';
+import getSupabaseServerComponentClient from '~/core/supabase/server-component-client';
+import { getOrganizationByUid } from '~/lib/organizations/database/queries';
 
-const getLinks = (organizationId: string) => {
-  const { organization, setOrganization } = useContext(OrganizationContext);
-  const currentOrganizationType = organization?.type ?? '';
+
+async function getLinks(organizationId: string){
+  const client = getSupabaseServerComponentClient();
+  let currentOrganizationType: any = "";
+  const { error, data: organization } = await getOrganizationByUid(
+    client,
+    organizationId,
+  );
+  if (error || !organization) {
+    console.log("error retrieving organization");
+    throw new Error(`Error retrieving organization`);
+  } else {
+    currentOrganizationType = organization.type;
+  }
   if (currentOrganizationType == "company"){
     return [
       {
