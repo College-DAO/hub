@@ -1,5 +1,4 @@
 import React from 'react';
-import { use } from 'react';
 import NavigationMenu from '~/core/ui/Navigation/NavigationMenu';
 import NavigationItem from '~/core/ui/Navigation/NavigationItem';
 import AppHeader from '~/app/dashboard/[organization]/components/AppHeader';
@@ -11,8 +10,9 @@ import getCurrentOrganization from '~/lib/server/organizations/get-current-organ
 import getSupabaseServerComponentClient from '~/core/supabase/action-client';
 import requireSession from '~/lib/user/require-session';
 
-function getLinks(organizationId: string){
-  const organizationType = use(loadOrganizationType(organizationId));
+async function getLinks(organizationId: string){
+  const organizationType = await loadOrganizationType(organizationId);
+  console.log(organizationType);
   if (organizationType == "company"){
     return [
       {
@@ -50,8 +50,7 @@ async function SettingsLayout({
     organization: string;
   };
 }>) {
-  const links = getLinks(params.organization);
-
+  const links = await getLinks(params.organization);
   return (
     <>
       <AppHeader
@@ -92,13 +91,10 @@ async function loadOrganizationType(organizationUid: string) {
   const client = getSupabaseServerComponentClient();
   const session = await requireSession(client);
   const userId = session.user.id;
-
   const organizationResponse = await getCurrentOrganization({
     organizationUid,
     userId,
   });
-
   const organizationType = organizationResponse.organization?.type;
-
   return organizationType;
 }

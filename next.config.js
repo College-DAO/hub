@@ -18,7 +18,6 @@ module.exports = withAnalyzer({
 function getRemotePatterns() {
   // add here the remote patterns for your images
   const remotePatterns = [];
-
   if (SUPABASE_URL) {
     const hostname = new URL(SUPABASE_URL).hostname;
     remotePatterns.push({
@@ -27,12 +26,13 @@ function getRemotePatterns() {
     });
   }
 
-  return IS_PRODUCTION
-    ? remotePatterns
-    : [
-        {
-          protocol: 'http',
-          hostname: '127.0.0.1',
-        },
-      ];
+  // return IS_PRODUCTION
+  //   ? remotePatterns
+  //   : [
+  //       {
+  //         protocol: 'http',
+  //         hostname: '127.0.0.1',
+  //       },
+  //     ];
+  return remotePatterns;
 }
