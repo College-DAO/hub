@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { useContext } from 'react';
+import OrganizationContext from '~/lib/contexts/organization';
 import NavigationMenu from '~/core/ui/Navigation/NavigationMenu';
 import NavigationItem from '~/core/ui/Navigation/NavigationItem';
 import AppHeader from '~/app/dashboard/[organization]/components/AppHeader';
@@ -8,20 +9,37 @@ import { PageBody } from '~/core/ui/Page';
 import Trans from '~/core/ui/Trans';
 import configuration from '~/configuration';
 
-const getLinks = (organizationId: string) => [
-  {
-    path: getPath(organizationId, 'settings/profile'),
-    label: 'common:profileSettingsTabLabel',
-  },
-  {
-    path: getPath(organizationId, 'settings/organization'),
-    label: 'common:organizationSettingsTabLabel',
-  },
-  {
-    path: getPath(organizationId, 'settings/subscription'),
-    label: 'common:subscriptionSettingsTabLabel',
-  },
-];
+const getLinks = (organizationId: string) => {
+  const { organization, setOrganization } = useContext(OrganizationContext);
+  const currentOrganizationType = organization?.type ?? '';
+  if (currentOrganizationType == "company"){
+    return [
+      {
+        path: getPath(organizationId, 'settings/profile'),
+        label: 'common:profileSettingsTabLabel',
+      },
+      {
+        path: getPath(organizationId, 'settings/organization'),
+        label: 'common:organizationSettingsTabLabel',
+      },
+      {
+        path: getPath(organizationId, 'settings/subscription'),
+        label: 'common:subscriptionSettingsTabLabel',
+      },
+    ]
+  } else {
+    return [
+      {
+        path: getPath(organizationId, 'settings/profile'),
+        label: 'common:profileSettingsTabLabel',
+      },
+      {
+        path: getPath(organizationId, 'settings/organization'),
+        label: 'common:organizationSettingsTabLabel',
+      }
+    ]
+  }
+};
 
 async function SettingsLayout({
   children,

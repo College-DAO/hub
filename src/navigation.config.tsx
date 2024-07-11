@@ -4,8 +4,7 @@ import {
   UserGroupIcon,
   UserIcon,
   TableCellsIcon,
-  PaperAirplaneIcon,
-  BriefcaseIcon
+  Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 
 import configuration from '~/configuration';
@@ -55,32 +54,12 @@ const NAVIGATION_CONFIG = (organization: string): NavigationConfig => ({
       end: true,
     },
     {
-      label: 'common:settingsTabLabel',
-      collapsible: false,
-      children: [
-        {
-          label: 'common:profileSettingsTabLabel',
-          path: getPath(organization, paths.profile),
-          Icon: ({ className }: { className: string }) => {
-            return <UserIcon className={className} />;
-          },
-        },
-        {
-          label: 'common:organizationSettingsTabLabel',
-          path: getPath(organization, paths.organization),
-          Icon: ({ className }: { className: string }) => {
-            return <UserGroupIcon className={className} />;
-          },
-        },
-        {
-          label: 'common:subscriptionSettingsTabLabel',
-          path: getPath(organization, paths.subscription),
-          Icon: ({ className }: { className: string }) => {
-            return <CreditCardIcon className={className} />;
-          },
-        },
-      ],
-    },
+      label: 'common:profileSettingsTabLabel',
+      path: getPath(organization, paths.profile),
+      Icon: ({ className }: { className: string }) => {
+        return <Cog6ToothIcon className={className} />;
+      },
+    }
   ],
 });
 

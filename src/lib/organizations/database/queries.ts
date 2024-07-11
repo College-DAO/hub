@@ -20,6 +20,8 @@ const FETCH_ORGANIZATION_QUERY = `
   id,
   uuid,
   name,
+  approved,
+  type,
   logoURL: logo_url,
   subscription: organizations_subscriptions (
     customerId: customer_id,
