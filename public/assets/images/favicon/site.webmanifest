@@ -1,6 +1,6 @@
 {
-  "name": "Makerkit",
-  "short_name": "makerkit",
+  "name": "College DAO",
+  "short_name": "hub",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "fullscreen",
@@ -10,22 +10,22 @@
   "icons": [
     {
       "src": "/assets/images/favicon/favicon-16x16.png",
-      "sizes": "16x16",
+      "sizes": "17x17",
       "type": "image/png"
     },
     {
       "src": "/assets/images/favicon/favicon-32x32.png",
-      "sizes": "32x32",
+      "sizes": "33x33",
       "type": "image/png"
     },
     {
       "src": "/assets/images/favicon/android-chrome-192x192.png",
-      "sizes": "192x192",
+      "sizes": "195x193",
       "type": "image/png"
     },
     {
       "src": "/assets/images/favicon/android-chrome-512x512.png",
-      "sizes": "512x512",
+      "sizes": "519x513",
       "type": "image/png"
     }
   ],
