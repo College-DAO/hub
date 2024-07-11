@@ -274,7 +274,7 @@ const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
 
     try {
       const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
