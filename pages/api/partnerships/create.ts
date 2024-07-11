@@ -5,7 +5,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const {
@@ -20,8 +19,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sender_id,
       sender_name,
       receiver_id,
-      kpis
+      kpis,
+      status = 'pending',  // Default to 'pending' if not provided
     } = req.body;
+
+    const validStatuses = ['pending', 'accepted', 'rejected'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
 
     const partnerships = [
       {
@@ -36,7 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sender_id: sender_id,
         sender_name: sender_name,
         receiver_id: receiver_id,
-        kpis: kpis
+        kpis: kpis,
+        status: status
       },
       {
         partner_name: partnerName,
@@ -50,13 +56,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sender_id: sender_id,
         sender_name: sender_name,
         receiver_id: receiver_id,
-        kpis: kpis
+        kpis: kpis,
+        status: status
       }
     ];
 
     const { data, error } = await supabase
       .from('partnerships')
-      .insert(partnerships);
+      .insert(partnerships)
+      .select();  // Add this to return the inserted data
 
     if (error) {
       console.error('Supabase Error', {
@@ -72,7 +80,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    return res.status(200).json(data);
+    return res.status(201).json({
+      message: 'Partnerships created successfully',
+      partnerships: data.map(p => ({ id: p.id, status: p.status }))
+    });
   } else {
     res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${req.method} Not Allowed`);

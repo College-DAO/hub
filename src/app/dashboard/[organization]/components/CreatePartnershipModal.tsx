@@ -49,6 +49,7 @@ interface Partnership {
   fundingAmount: number;
   details: string;
   kpis: Kpi[];
+  status: string;
 }
 
 const CreatePartnershipModalToggle: React.FC = () => {
@@ -66,6 +67,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
     sender_name: string | undefined;
     receiver_id: number | undefined;
     kpis: Kpi[];
+    status: string;
   }>({
     partnerName: '',
     partnershipName: '',
@@ -79,6 +81,7 @@ const CreatePartnershipModalToggle: React.FC = () => {
     sender_name: '',
     receiver_id: undefined,
     kpis: [],
+    status: 'pending', // Initialize status here
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -133,11 +136,15 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   useEffect(() => {
     if (org_id) {
-      setFormData(prevFormData => ({
-        ...prevFormData,
-        sender_id: org_id,
-        sender_name: org_name,
-      }));
+      setFormData(prevFormData => {
+        const updatedFormData = {
+          ...prevFormData,
+          sender_id: org_id,
+          sender_name: org_name,
+        };
+        console.log("Updated form data:", updatedFormData);
+        return updatedFormData;
+      });
     }
   }, [org_id, org_name]);
 
@@ -158,19 +165,22 @@ const CreatePartnershipModalToggle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    console.log("Submitting form data:", formData); // Log form data
+
     try {
       const response = await fetch('/api/partnerships/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // Send formData directly
       });
 
       if (!response.ok) throw new Error('Failed to create partnership');
       const data = await response.json();
       setIsOpen(false);
-      console.log('Partnership created successfully');
+      console.log('Partnership created successfully:', data); // Log response data
       setSentPartnership(data);
     } catch (error: any) {
       console.error('Error creating partnership:', error.message);

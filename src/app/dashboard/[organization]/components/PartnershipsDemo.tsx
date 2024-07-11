@@ -458,35 +458,37 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
 
   const handleAccept = async () => {
     try {
-      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+      console.log('Accepting partnership:', partnership?.id);
+      const response = await fetch(`/api/partnerships/accept?id=${partnership?.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'accepted' }),
       });
 
       if (!response.ok) throw new Error('Failed to accept partnership');
 
       const updatedPartnership = await response.json();
+      console.log('Updated partnership:', updatedPartnership);
 
       updatePartnershipInState(updatedPartnership);
 
       setIsOpen(false);
       console.log('Partnership accepted successfully');
+      // Consider adding a user-facing success message here
     } catch (error: any) {
       console.error('Error accepting partnership:', error.message);
+      // Consider adding a user-facing error message here
     }
   };
 
   const handleDecline = async () => {
     try {
-      const response = await fetch(`/api/partnerships/update?id=${partnership?.id}`, {
+      const response = await fetch(`/api/partnerships/decline?id=${partnership?.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'declined' }),
       });
 
       if (!response.ok) throw new Error('Failed to decline partnership');
@@ -608,8 +610,8 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-                <Button onClick={() => { handleAccept(); setIsOpen(false); }} type="button">Accept Partnership</Button>
-                <Button onClick={() => { handleDecline(); setIsOpen(false); }} type="button">Decline Partnership</Button>
+                <Button onClick={handleAccept} type="button">Accept Partnership</Button>
+                <Button onClick={handleDecline} type="button">Decline Partnership</Button>
               </CardFooter>
             </Card>
           </TabsContent>
