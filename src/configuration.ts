@@ -75,72 +75,23 @@ const configuration = {
     displayMode: StripeCheckoutDisplayMode.Popup,
     products: [
       {
-        name: 'Basic',
-        description: 'Description of your Basic plan',
-        badge: `Up to 20 users`,
-        features: [
-          'Basic Reporting',
-          'Up to 20 users',
-          '1GB for each user',
-          'Chat Support',
-        ],
-        plans: [
-          {
-            name: 'Monthly',
-            price: '$9',
-            stripePriceId: 'price_1NNwYHI1i3VnbZTqI2UzaHIe',
-          },
-          {
-            name: 'Yearly',
-            price: '$90',
-            stripePriceId: 'basic-plan-yr',
-          },
-        ],
-      },
-      {
-        name: 'Pro',
+        name: 'Whale Plan',
         badge: `Most Popular`,
         recommended: true,
-        description: 'Description of your Pro plan',
+        description: 'Unlock the university blockchain ecosystem',
         features: [
-          'Advanced Reporting',
-          'Up to 50 users',
-          '5GB for each user',
-          'Chat and Phone Support',
+          'Full access to the Hub',
+          'Unlimited partnership requests',
+          'Dedicated growth manager',
         ],
         plans: [
-          {
-            name: 'Monthly',
-            price: '$29',
-            stripePriceId: 'pro-plan-mth',
-          },
           {
             name: 'Yearly',
-            price: '$200',
-            stripePriceId: 'pro-plan-yr',
+            price: '$3588',
+            stripePriceId: 'price_1PbFggESJxgH3vMovuvzgP3W',
           },
         ],
-      },
-      {
-        name: 'Premium',
-        description: 'Description of your Premium plan',
-        badge: ``,
-        features: [
-          'Advanced Reporting',
-          'Unlimited users',
-          '50GB for each user',
-          'Account Manager',
-        ],
-        plans: [
-          {
-            name: '',
-            price: 'Contact us',
-            stripePriceId: '',
-            label: `Contact us`,
-            href: `/contact`,
-          },
-        ],
-      },
+      }
     ],
   },
 };
