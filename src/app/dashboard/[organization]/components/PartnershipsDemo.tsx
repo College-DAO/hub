@@ -612,20 +612,23 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center space-x-4">
-                <Button
-                  onClick={handleAccept}
-                  type="button"
-                  disabled={formData.status !== 'pending'}
-                >
-                  Accept Partnership
-                </Button>
-                <Button
-                  onClick={handleDecline}
-                  type="button"
-                  disabled={formData.status !== 'pending'}
-                >
-                  Decline Partnership
-                </Button>
+                {formData.status === 'pending' && (
+                  <Button
+                    onClick={handleAccept}
+                    type="button"
+                  >
+                    Accept Partnership
+                  </Button>
+                )}
+
+                {formData.status === 'pending' && (
+                  <Button
+                    onClick={handleDecline}
+                    type="button"
+                  >
+                    Decline Partnership
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           </TabsContent>
