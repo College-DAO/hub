@@ -156,7 +156,7 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
     };
 
     fetchData();
-  }, [type, org_id]); // Re-fetch the data when the "type" or "org_id" prop changes
+  }, [type, org_id]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -193,25 +193,22 @@ function PartnershipsTable({ type, handleEdit, handleView }: PartnershipsTablePr
             <TableCell>{partnership.partnership_name}</TableCell>
             <TableCell>{`$${partnership.funding}`}</TableCell>
             <TableCell>{partnership.duration_end}</TableCell>
+            <TableCell>{getStatusBadge(partnership.status)}</TableCell>
             <TableCell>
-              {getStatusBadge(partnership.status)}
-            </TableCell>
-            {type === 'sent' && (
-              <TableCell>
+              {type === 'sent' && (
                 <Button onClick={() => handleEdit(partnership)}>Edit</Button>
-              </TableCell>
-            )}
-            {type === 'received' && (
-              <TableCell>
+              )}
+              {type === 'received' && (
                 <Button onClick={() => handleView(partnership)}>View</Button>
-              </TableCell>
-            )}
+              )}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   );
 }
+
 
 const EditPartnershipModal: React.FC<EditPartnershipModalProps> = ({
   partnership,
@@ -614,20 +611,26 @@ const ViewPartnershipModal: React.FC<EditPartnershipModalProps & { isViewOnly?: 
               <CardFooter className="flex justify-center space-x-4">
                 {formData.status === 'pending' && (
                   <Button
-                    onClick={handleAccept}
-                    type="button"
-                  >
-                    Accept Partnership
-                  </Button>
+                  onClick={() => {
+                    handleAccept();
+                    setIsOpen(false);
+                  }}
+                  type="button"
+                >
+                  Accept Partnership
+                </Button>
                 )}
 
                 {formData.status === 'pending' && (
                   <Button
-                    onClick={handleDecline}
-                    type="button"
-                  >
-                    Decline Partnership
-                  </Button>
+                  onClick={() => {
+                    handleDecline();
+                    setIsOpen(false);
+                  }}
+                  type="button"
+                >
+                  Decline Partnership
+                </Button>
                 )}
               </CardFooter>
             </Card>

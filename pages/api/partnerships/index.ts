@@ -1,4 +1,3 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
@@ -13,16 +12,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     let query = supabase
       .from('partnerships')
-      .select('*')
-      .eq('sender_id', userId)
-      .or('receiver_id.eq.${}');
+      .select('*');
 
     if (type === 'sent') {
-      query = query
-        .eq('sender_id', userId);
+      query = query.eq('sender_id', userId);
     } else if (type === 'received') {
-      query = query
-        .eq('receiver_id', userId) 
+      query = query.eq('receiver_id', userId);
+    } else {
+      // Fetch both sent and received partnerships
+      query = query.or(`sender_id.eq.${userId},receiver_id.eq.${userId}`);
     }
 
     let { data, error } = await query;
