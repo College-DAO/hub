@@ -9,12 +9,12 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     const { query } = req.query;
-    
+
     const { data, error } = await supabase
       .from('organizations')
       .select('*')
       .ilike('name', `%${query}%`);
-    
+
     if (error) {
       console.error('Error searching organizations:', error);
       return res.status(500).json({ error: error.message });

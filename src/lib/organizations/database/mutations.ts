@@ -25,11 +25,9 @@ export async function updateOrganization(
     data: Partial<Organization>;
   },
 ) {
-  const payload: Omit<Partial<OrganizationRow>, 'id'> = {};
-
-  if ('name' in params.data){
-    payload.name = params.data.name;
-  }
+  const payload: Omit<Partial<OrganizationRow>, 'id'> = {
+    name: params.data.name,
+  };
 
   if ('email' in params.data){
     payload.email = params.data.email;
@@ -43,7 +41,7 @@ export async function updateOrganization(
     payload.socials = params.data.socials;
   }
 
-  if ('logo_url' in params.data) {
+  if ('logoURL' in params.data) {
     payload.logo_url = params.data.logoURL;
   }
 
