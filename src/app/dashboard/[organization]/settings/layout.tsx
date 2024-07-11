@@ -1,4 +1,5 @@
 import React from 'react';
+import { use } from 'react';
 import NavigationMenu from '~/core/ui/Navigation/NavigationMenu';
 import NavigationItem from '~/core/ui/Navigation/NavigationItem';
 import AppHeader from '~/app/dashboard/[organization]/components/AppHeader';
@@ -6,24 +7,13 @@ import { withI18n } from '~/i18n/with-i18n';
 import { PageBody } from '~/core/ui/Page';
 import Trans from '~/core/ui/Trans';
 import configuration from '~/configuration';
-import getSupabaseServerComponentClient from '~/core/supabase/server-component-client';
-import { getOrganizationByUid } from '~/lib/organizations/database/queries';
+import getCurrentOrganization from '~/lib/server/organizations/get-current-organization';
+import getSupabaseServerComponentClient from '~/core/supabase/action-client';
+import requireSession from '~/lib/user/require-session';
 
-
-async function getLinks(organizationId: string){
-  const client = getSupabaseServerComponentClient();
-  let currentOrganizationType: any = "";
-  const { error, data: organization } = await getOrganizationByUid(
-    client,
-    organizationId,
-  );
-  if (error || !organization) {
-    console.log("error retrieving organization");
-    throw new Error(`Error retrieving organization`);
-  } else {
-    currentOrganizationType = organization.type;
-  }
-  if (currentOrganizationType == "company"){
+function getLinks(organizationId: string){
+  const organizationType = use(loadOrganizationType(organizationId));
+  if (organizationType == "company"){
     return [
       {
         path: getPath(organizationId, 'settings/profile'),
@@ -96,4 +86,19 @@ function getPath(organizationId: string, path: string) {
   const appPrefix = configuration.paths.appPrefix;
 
   return `${appPrefix}/${organizationId}/${path}`;
+}
+
+async function loadOrganizationType(organizationUid: string) {
+  const client = getSupabaseServerComponentClient();
+  const session = await requireSession(client);
+  const userId = session.user.id;
+
+  const organizationResponse = await getCurrentOrganization({
+    organizationUid,
+    userId,
+  });
+
+  const organizationType = organizationResponse.organization?.type;
+
+  return organizationType;
 }
