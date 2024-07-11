@@ -14,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let query = supabase
       .from('partnerships')
       .select('*')
-      .eq('type', type);
+      .eq('sender_id', userId)
+      .or('receiver_id.eq.${}');
 
     if (type === 'sent') {
       query = query
