@@ -62,6 +62,7 @@
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "2.39.7",
     "@tanstack/react-table": "^8.13.2",
+    "again": "^0.0.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.0",
     "contentlayer": "0.3.4",
