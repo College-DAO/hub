@@ -12,6 +12,7 @@ import OrganizationInfoStep, {
 } from './OrganizationInfoStep';
 
 import CompleteOnboardingStep from './CompleteOnboardingStep';
+import PendingApprovalStep from './PendingApprovalStep'; // Import the new step
 import OrganizationInvitesStep from '~/app/onboarding/components/OrganizationInvitesStep';
 import MembershipRole from '~/lib/organizations/types/membership-role';
 
@@ -20,19 +21,10 @@ type Invite = {
   role: MembershipRole;
 };
 
-/**
- * Represents the list of steps for a user onboarding process.
- * The Array represents the list of step names to render within
- * the Stepper component. You can either use the i18n key or the label itself.
- *
- * Update this array to add/remove steps from the onboarding process.
- *
- * @type {Array<string>}
- */
 const STEPS: Array<string> = [
   'onboarding:info',
   'onboarding:invites',
-  'onboarding:complete',
+  'onboarding:pendingApproval', // Update step name
 ];
 
 function OnboardingContainer(
@@ -65,7 +57,7 @@ function OnboardingContainer(
   const onInvitesStepSubmitted = useCallback(
     (invites: Invite[]) => {
       form.setValue('data.invites', invites);
-      form.setValue('currentStep', form.getValues('currentStep') + 1);
+      nextStep();
     },
     [form],
   );
@@ -91,7 +83,7 @@ function OnboardingContainer(
       </If>
 
       <If condition={isStep(2) && formData}>
-        {(formData) => <CompleteOnboardingStep data={formData} />}
+        <PendingApprovalStep data={formData} /> // Change to PendingApprovalStep
       </If>
     </CsrfTokenContext.Provider>
   );
