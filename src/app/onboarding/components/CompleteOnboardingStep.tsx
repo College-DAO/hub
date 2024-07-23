@@ -1,6 +1,8 @@
+// CompleteOnboardingStep.tsx
+
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useMutation from 'swr/mutation';
 import { CheckIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
@@ -21,15 +23,20 @@ interface CompleteOnboardingStepData {
   }>;
 }
 
+interface OnboardingResponse {
+  success: boolean;
+  returnUrl?: string;
+  organizationId?: string;
+}
+
 const CompleteOnboardingStep: React.FC<{
   data: CompleteOnboardingStepData;
 }> = ({ data }) => {
   const mutation = useOnboardingMutation();
   const submitted = useRef(false);
   const { trigger, data: response, error } = mutation;
+  const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
 
-  // we make a request to the server to complete the onboarding process
-  // as soon as the component is mounted.
   useEffect(() => {
     if (!submitted.current) {
       void trigger(data);
@@ -37,12 +44,43 @@ const CompleteOnboardingStep: React.FC<{
     }
   }, [data, trigger]);
 
+  useEffect(() => {
+    if (response && response.success && response.organizationId) {
+      const pollInterval = setInterval(() => {
+        checkApprovalStatus(response.organizationId as string);
+      }, 5000);
+
+      return () => clearInterval(pollInterval);
+    }
+  }, [response]);
+
+  const checkApprovalStatus = async (organizationId: string) => {
+    try {
+      const result = await fetch(`/api/onboarding/check-approval-status?organizationId=${organizationId}`);
+      const status = await result.json();
+      if (status.approved) {
+        setApprovalStatus('approved');
+      } else if (status.rejected) {
+        setApprovalStatus('rejected');
+      }
+    } catch (error) {
+      console.error('Error checking approval status:', error);
+    }
+  };
+
   if (error) {
+    console.log(error)
     return <ErrorState />;
   }
 
   if (response && response.success) {
-    return <SuccessState returnUrl={response.returnUrl} />;
+    if (approvalStatus === 'pending') {
+      return <PendingApprovalState />;
+    } else if (approvalStatus === 'approved') {
+      return <SuccessState returnUrl={response.returnUrl || ''} />;
+    } else if (approvalStatus === 'rejected') {
+      return <RejectedState />;
+    }
   }
 
   return (
@@ -73,6 +111,32 @@ function ErrorState() {
       </Alert.Heading>
 
       <Trans i18nKey={'common:genericError'} />
+    </Alert>
+  );
+}
+
+function PendingApprovalState() {
+  return (
+    <div className="flex flex-col items-center space-y-4">
+      <Spinner className={'h-12 w-12'} />
+      <Heading type={3}>
+        <Trans i18nKey={'onboarding:pendingApproval'} />
+      </Heading>
+      <p>
+        <Trans i18nKey={'onboarding:pendingApprovalDescription'} />
+      </p>
+    </div>
+  );
+}
+
+function RejectedState() {
+  return (
+    <Alert type={'error'}>
+      <Alert.Heading>
+        <Trans i18nKey={'onboarding:rejectedAlertHeading'} />
+      </Alert.Heading>
+
+      <Trans i18nKey={'onboarding:rejectedDescription'} />
     </Alert>
   );
 }
@@ -126,13 +190,7 @@ function SuccessState(props: { returnUrl: string }) {
 }
 
 function useOnboardingMutation() {
-  const fetcher = useApiRequest<
-    {
-      success: boolean;
-      returnUrl: string;
-    },
-    CompleteOnboardingStepData
-  >();
+  const fetcher = useApiRequest<OnboardingResponse, CompleteOnboardingStepData>();
 
   const mutationFn = async (
     _: string[],
@@ -140,10 +198,10 @@ function useOnboardingMutation() {
   ) => {
     return fetcher({
       method: 'POST',
-      path: '/onboarding/complete',
+      path: '/api/onboarding/initiate',  // Make sure this path is correct
       body: arg,
     });
   };
 
-  return useMutation(['complete-onboarding'], mutationFn);
+  return useMutation(['initiate-onboarding'], mutationFn);
 }
