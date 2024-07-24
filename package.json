@@ -127,7 +127,7 @@
     "prettier-plugin-tailwindcss": "^0.5.12",
     "supabase": "^1.148.6",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.5.4"
   },
   "engines": {
     "node": ">=18.17.0"
