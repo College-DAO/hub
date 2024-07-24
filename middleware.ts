@@ -60,7 +60,7 @@ async function organizationStatusMiddleware(request: NextRequest, response: Next
   const supabase = createMiddlewareClient(request, response);
   const { data: { user } } = await supabase.auth.getUser();
 
-  const excludedPaths = ['/api', '/auth', '/error', '/loading', '/pending-approval'];
+  const excludedPaths = ['/api', '/auth', '/error', '/loading', '/pending-approval', '/onboarding'];
   if (excludedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
     return response;
   }
@@ -73,7 +73,8 @@ async function organizationStatusMiddleware(request: NextRequest, response: Next
       .single();
 
     if (membershipError || !membership?.organization_id) {
-      return NextResponse.redirect(`${configuration.site.siteUrl}/error`);
+      console.log(membershipError)
+      return NextResponse.redirect(`${configuration.site.siteUrl}/onboarding`);
     }
 
     const { data: organization, error: orgError } = await supabase

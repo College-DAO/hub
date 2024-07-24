@@ -16,7 +16,7 @@ import { transferOwnership } from '~/lib/memberships/mutations';
 import inviteMembers from '~/lib/server/organizations/invite-members';
 import MembershipRole from '~/lib/organizations/types/membership-role';
 import { getOrganizationByUid } from '~/lib/organizations/database/queries';
-
+import sendEmail from '~/core/email/send-email';
 import configuration from '~/configuration';
 import removeMembership from '~/lib/server/organizations/remove-membership';
 import deleteOrganization from '~/lib/server/organizations/delete-organization';
@@ -26,58 +26,75 @@ import { getUserMembershipByOrganization } from '~/lib/memberships/queries';
 export const createNewOrganizationAction = withSession(
   async (formData: FormData) => {
     const logger = getLogger();
+    try {
+      const organization = await z
+        .string()
+        .min(1)
+        .max(50)
+        .parseAsync(formData.get('organization'));
 
-    const organization = await z
-      .string()
-      .min(1)
-      .max(50)
-      .parseAsync(formData.get('organization'));
+      const client = getSupabaseServerActionClient();
+      const session = await requireSession(client);
+      const userId = session.user.id;
 
-    const client = getSupabaseServerActionClient();
-    const session = await requireSession(client);
-    const userId = session.user.id;
+      logger.info({ userId, organization }, `Creating organization...`);
 
-    logger.info(
-      {
-        userId,
-        organization,
-      },
-      `Creating organization...`,
-    );
+      const { data: organizationUid, error } = await client
+        .rpc('create_new_organization', {
+          org_name: organization,
+          create_user: false,
+        })
+        .throwOnError()
+        .single();
 
-    const { data: organizationUid, error } = await client
-      .rpc('create_new_organization', {
-        org_name: organization,
-        create_user: false,
-      })
-      .throwOnError()
-      .single();
+      if (error) {
+        throw new Error(`Error creating organization: ${error.message}`);
+      }
 
-    if (error) {
-      return handleError(error, `Error creating organization`);
+      logger.info({ userId, organization }, `Organization successfully created`);
+
+      cookies().set(
+        createOrganizationIdCookie({
+          userId,
+          organizationUid,
+        })
+      );
+
+      // Send notification email to the admin
+      try {
+        logger.info(`Attempting to send email notification to admin...`);
+        const senderEmail = process.env.EMAIL_SENDER;
+        if (!senderEmail) {
+          throw new Error("Missing EMAIL_SENDER environment variable");
+        }
+        await sendEmail({
+          from: senderEmail, // Use environment variable
+          to: 'adalua@umich.edu', // Admin email
+          subject: 'New Organization Created - Verification Required',
+          text: `A new organization named "${organization}" has been created. Please verify the organization details and approve it as necessary.`,
+          html: `<p>A new organization named <strong>${organization}</strong> has been created.</p>
+                 <p>Please verify the organization details and approve it as necessary.</p>`,
+        });
+        logger.info(`Email notification sent to adalua@umich.edu`);
+      } catch (emailError) {
+        if (emailError instanceof Error) {
+          logger.error(`Failed to send email notification: ${emailError.message}`);
+        } else {
+          logger.error(`Failed to send email notification: ${String(emailError)}`);
+        }
+      }
+
+      const redirectPath = [configuration.paths.appHome, organizationUid].join('/');
+      return redirect(redirectPath);
+    } catch (error) {
+      if (error instanceof Error) {
+        logger.error(`Error in createNewOrganizationAction: ${error.message}`);
+      } else {
+        logger.error(`Error in createNewOrganizationAction: ${String(error)}`);
+      }
+      throw error;
     }
-
-    logger.info(
-      {
-        userId,
-        organization,
-      },
-      `Organization successfully created`,
-    );
-
-    cookies().set(
-      createOrganizationIdCookie({
-        userId,
-        organizationUid,
-      }),
-    );
-
-    const redirectPath = [configuration.paths.appHome, organizationUid].join(
-      '/',
-    );
-
-    redirect(redirectPath);
-  },
+  }
 );
 
 export const transferOrganizationOwnershipAction = withSession(
