@@ -69,13 +69,13 @@ export const createNewOrganizationAction = withSession(
         }
         await sendEmail({
           from: senderEmail, // Use environment variable
-          to: 'adalua@umich.edu', // Admin email
+          to: 'admin@collegedao.io', // Admin email
           subject: 'New Organization Created - Verification Required',
           text: `A new organization named "${organization}" has been created. Please verify the organization details and approve it as necessary.`,
           html: `<p>A new organization named <strong>${organization}</strong> has been created.</p>
                  <p>Please verify the organization details and approve it as necessary.</p>`,
         });
-        logger.info(`Email notification sent to adalua@umich.edu`);
+        logger.info(`Email notification sent to admin`);
       } catch (emailError) {
         if (emailError instanceof Error) {
           logger.error(`Failed to send email notification: ${emailError.message}`);

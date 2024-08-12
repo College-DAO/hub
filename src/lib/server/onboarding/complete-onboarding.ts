@@ -42,13 +42,13 @@ async function completeOnboarding({ organizationName, client }: Params) {
       }
       await sendEmail({
         from: senderEmail,
-        to: 'adalua@umich.edu', // Admin email
+        to: 'admin@collegedao.io', // Admin email
         subject: 'New Organization Created - Verification Required',
         text: `A new organization named "${organizationName}" has been created. Please verify the organization details and approve it as necessary.`,
         html: `<p>A new organization named <strong>${organizationName}</strong> has been created.</p>
                <p>Please verify the organization details and approve it as necessary.</p>`,
       });
-      logger.info(`Email notification sent to adalua@umich.edu`);
+      logger.info(`Email notification sent to admin`);
     } catch (emailError) {
       logger.error(`Failed to send email notification:`);
     }

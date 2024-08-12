@@ -72,29 +72,36 @@ async function organizationStatusMiddleware(request: NextRequest, response: Next
       .select('organization_id')
       .eq('user_id', user.id);
 
-    if (membershipsError || !memberships.length) {
-      console.log(membershipsError);
-      return NextResponse.redirect(`${configuration.site.siteUrl}/onboarding`);
-    }
+      if (membershipsError || !memberships || memberships.length === 0) {
+        console.log("membership error: ")
+        console.log(membershipsError);
+        if (!request.url.includes('/onboarding')) {
+          return NextResponse.redirect(`${configuration.site.siteUrl}/onboarding`);
+        } else {
+          console.log("on onboarding")
+          return response
+        }
+      }
 
     // Check the approval status of each organization
-    for (const membership of memberships) {
-      const { data: organization, error: orgError } = await supabase
-        .from('organizations')
-        .select('approved')
-        .eq('id', membership.organization_id)
-        .single();
-
-      if (orgError) {
-        console.log(orgError);
-        continue;
-      }
-
-      if (!organization?.approved) {
-        return NextResponse.redirect(`${configuration.site.siteUrl}/pending-approval`);
+    if (memberships && memberships.length > 0) {
+      for (const membership of memberships) {
+        const { data: organization, error: orgError } = await supabase
+          .from('organizations')
+          .select('approved')
+          .eq('id', membership.organization_id)
+          .single();
+  
+        if (orgError) {
+          console.log(orgError);
+          continue;
+        }
+  
+        if (!organization?.approved) {
+          return NextResponse.redirect(`${configuration.site.siteUrl}/pending-approval`);
+        }
       }
     }
-
     // If all organizations are approved, proceed
     return response;
   } else {
